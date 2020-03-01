@@ -1,0 +1,32 @@
+{
+  "name": "Bad Vis Browser",
+  "dockerFile": "Dockerfile",
+  "workspaceMount": "source=/home/leo/sftp/bad-vis-browser,target=/bad-vis-browser,type=bind,consistency=cached",
+  "workspaceFolder": "/bad-vis-browser",
+  "mounts": [
+    "source=bad-vis-browser-vscode-server,target=/home/node/.vscode-server/extensions,type=volume",
+    "source=bad-vis-browser-dot-zplug,target=/home/node/.zplug,type=volume",
+    "source=bad-vis-browser-node_modules,target=/bad-vis-browser/node_modules,type=volume",
+    "source=bad-vis-browser-dot-next,target=/bad-vis-browser/.next,type=volume",
+    "source=/home/leo/ws/projects/bad-vis-browser/gallery,target=/bad-vis-browser/gallery,type=bind,consistency=cached"
+  ],
+  "appPort": [3000],
+  "remoteUser": "node",
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/zsh"
+  },
+  "postCreateCommand": "/bin/zsh .devcontainer/post-create-command.sh",
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "christian-kohler.npm-intellisense",
+    "auchenberg.vscode-browser-preview",
+    "VisualStudioExptTeam.vscodeintellicode",
+    "wix.vscode-import-cost",
+    "ritwickdey.LiveServer",
+    "ms-python.python",
+    "humao.rest-client",
+    "msjsdiag.debugger-for-chrome",
+    "mutantdino.resourcemonitor",
+    "prashaantt.node-tdd"
+  ]
+}

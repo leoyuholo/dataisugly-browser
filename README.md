@@ -1,2 +1,1 @@
-# bad-vis-browser
-Learning from thousands visualization mistakes
+# Bad Vis Browser
