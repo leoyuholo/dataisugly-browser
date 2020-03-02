@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
 import CardMedia from '@material-ui/core/CardMedia'
-import { useRouter } from 'next/router'
 
 const useStyles = makeStyles({
   root: {
@@ -16,11 +15,6 @@ const useStyles = makeStyles({
 const ImageCard = props => {
   const { image } = props
   const classes = useStyles()
-  const router = useRouter()
-
-  const handleClick = e => {
-    router.push(`/image/${image.image_name}`)
-  }
 
   return (
     <Card className={classes.root}>

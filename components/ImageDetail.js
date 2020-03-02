@@ -8,10 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
-import FormLabel from '@material-ui/core/FormLabel';
-import Link from '@material-ui/core/Link'
-import Chip from '@material-ui/core/Chip';
-import { blue, pink } from '@material-ui/core/colors'
+import Chip from '@material-ui/core/Chip'
 
 import Loading from './Loading'
 
@@ -84,12 +81,6 @@ const ImageDetail = props => {
   const { image, handleClose } = props
   const darkTheme = createMuiTheme({
     palette: {
-      // primary: {
-      //   main: blue['200']
-      // },
-      // secondary: {
-      //   main: pink['200']
-      // },
       type: 'dark'
     }
   })
@@ -191,7 +182,10 @@ const ImageDetail = props => {
 ImageDetail.propTypes = {
   image: PropTypes.shape({
     url: PropTypes.string.isRequired,
-    image_path: PropTypes.string.isRequired
+    image_path: PropTypes.string.isRequired,
+    source: PropTypes.string.isRequired,
+    source_url: PropTypes.string.isRequired,
+    source_platform: PropTypes.string.isRequired
   }),
   handleClose: PropTypes.func
 }
