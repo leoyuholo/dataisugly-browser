@@ -8,7 +8,7 @@
     "source=bad-vis-browser-dot-zplug,target=/home/node/.zplug,type=volume",
     "source=bad-vis-browser-node_modules,target=/bad-vis-browser/node_modules,type=volume",
     "source=bad-vis-browser-dot-next,target=/bad-vis-browser/.next,type=volume",
-    "source=/home/leo/ws/projects/bad-vis-browser/gallery,target=/bad-vis-browser/gallery,type=bind,consistency=cached"
+    "source=/home/leo/ws/projects/bad-vis-browser/gallery,target=/bad-vis-browser/public/gallery,type=bind"
   ],
   "appPort": [3000],
   "remoteUser": "node",

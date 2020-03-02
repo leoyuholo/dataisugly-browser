@@ -1,21 +1,33 @@
 import React from 'react'
-import useSWR from 'swr'
+import PropTypes from 'prop-types'
+import fetch from 'isomorphic-unfetch'
 
 import Gallery from '../components/Gallery'
+import Loading from '../components/Loading'
 
-function fetcher (url) {
-  return fetch(url).then(r => r.json())
-}
+const Index = props => {
+  const { images } = props
 
-export default function Index () {
-  const { data } = useSWR(
-    '/api/images',
-    fetcher
-  )
+  if (!images) {
+    return (<Loading />)
+  }
 
   return (
     <div>
-      <Gallery images={data} />
+      <Gallery images={images} />
     </div>
   )
 }
+
+Index.propTypes = {
+  images: PropTypes.array
+}
+
+Index.getInitialProps = async ctx => {
+  const hostname = 'http://localhost:3000'
+  const res = await fetch(`${hostname}/gallery/images.json`)
+  const json = await res.json()
+  return { images: json }
+}
+
+export default Index
