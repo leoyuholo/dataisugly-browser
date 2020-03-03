@@ -25,7 +25,7 @@ Index.propTypes = {
 
 Index.getInitialProps = async ctx => {
   const hostname = 'http://localhost:3000'
-  const res = await fetch(`${hostname}/gallery/images.json`)
+  const res = await fetch(`${hostname}/gallery/images_top255.json`)
   const json = await res.json()
   return { images: json }
 }

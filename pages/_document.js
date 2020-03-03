@@ -9,6 +9,7 @@ export default class MyDocument extends Document {
       <html lang="en">
         <Head>
           {/* PWA primary color */}
+          <title>Bad Vis Browser</title>
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link
             rel="stylesheet"

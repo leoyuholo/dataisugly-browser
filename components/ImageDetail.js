@@ -4,189 +4,110 @@ import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/sty
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
-import Typography from '@material-ui/core/Typography'
-import Chip from '@material-ui/core/Chip'
+import Dialog from '@material-ui/core/Dialog'
+import { Grow } from '@material-ui/core'
 
-import Loading from './Loading'
+import ImageGrid from './LightBox/ImageGrid'
+import CaptionGrid from './LightBox/CaptionGrid'
 
 const useStyles = makeStyles(theme => ({
+  dialog: {
+    backgroundColor: 'transparent'
+  },
+  paper: {
+    margin: 0,
+    padding: 0,
+    width: '100%',
+    maxHeight: '100%',
+    maxWidth: '100%'
+  },
   root: {
-    minHeight: '100vh'
+    minHeight: '100vh',
+    backgroundColor: 'transparent'
   },
   appBar: {
     position: 'absolute',
     backgroundColor: 'rgba(0, 0, 0, 0)'
   },
-  closeIcon: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
-  },
   imageDetail: {
     flexGrow: 1,
-    alignContent: 'center'
+    minHeight: '100vh'
   },
   imageGrid: {
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    maxHeight: '100vh',
-    display: 'flex',
-    textAlign: 'center',
-    alignContent: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
     [theme.breakpoints.down('sm')]: {
-      minHeight: '0'
-    },
-    [theme.breakpoints.up('md')]: {
-      minHeight: '100vh'
-    }
-  },
-  img: {
-    backgroundColor: 'white',
-    maxWidth: '100%',
-    maxHeight: '99vh',
-    objectFit: 'contain'
-  },
-  descriptionGrid: {
-    backgroundColor: theme.palette.grey['900'],
-    [theme.breakpoints.down('sm')]: {
+      minHeight: '0',
       minWidth: '100%'
     },
     [theme.breakpoints.up('md')]: {
       minHeight: '100vh'
     }
   },
-  paper: {
-    backgroundColor: 'transparent',
-    padding: theme.spacing(4),
-    margin: theme.spacing(4)
-  },
-  labels: {
+  captionGrid: {
     [theme.breakpoints.down('sm')]: {
-      flexDirection: 'row'
+      minWidth: '100%'
     },
     [theme.breakpoints.up('md')]: {
-      flexDirection: 'column'
-    }
-  },
-  chips: {
-    '& > *': {
-      margin: theme.spacing(0.5)
+      minHeight: '100vh'
     }
   }
 }))
 
+const Transition = React.forwardRef(function Transition (props, ref) {
+  return <Grow direction="up" ref={ref} {...props} />
+})
+
 const ImageDetail = props => {
+  if (!props.open) { return null }
+
   const { image, handleClose } = props
+  const classes = useStyles()
   const darkTheme = createMuiTheme({
     palette: {
       type: 'dark'
+    },
+    overrides: {
+      MuiDialog: {
+        paper: {
+          backgroundColor: 'transparent'
+        }
+      }
     }
   })
-  const classes = useStyles()
-
-  if (!image) {
-    return (<Loading />)
-  }
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <div className={classes.root}>
-        <AppBar className={classes.appBar} elevation={0}>
-          <Toolbar disableGutters variant="dense">
-            <IconButton className={classes.closeIcon} color="inherit" onClick={handleClose} aria-label="close">
-              <CloseIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <div className={classes.imageDetail}>
-          <Grid container>
-            <Grid className={classes.imageGrid} item sm={12} md={8}>
-              <Grid>
-                <img className={classes.img} alt="complex" src={`/${image.image_path}`} />
-              </Grid>
-            </Grid>
-            <Grid className={classes.descriptionGrid} item sm={12} md={4}>
-              <Paper className={classes.paper} elevation={0}>
-                <Grid className={classes.labels} container>
-                  <Grid className={classes.chips} item>
-                    <Typography>
-                      Source:
-                    </Typography>
-                    <Chip
-                      label={image.source_platform}
-                      component="a"
-                      href={image.source_url}
-                      clickable
-                      color="primary"
-                      target="_blank"
-                    />
-                    <Chip
-                      label={image.source}
-                      component="a"
-                      href={image.url}
-                      clickable
-                      color="secondary"
-                      target="_blank"
-                    />
-                  </Grid>
-                  <Grid className={classes.chips} item>
-                    <Typography>
-                      Data Type:
-                    </Typography>
-                    <Chip
-                      label="Categorical"
-                    />
-                    <Chip
-                      label="Quantitative"
-                    />
-                  </Grid>
-                  <Grid className={classes.chips} item>
-                    <Typography>
-                      Chart Type:
-                    </Typography>
-                    <Chip
-                      label="Bar Chart"
-                    />
-                  </Grid>
-                  <Grid className={classes.chips} item>
-                    <Typography>
-                      Other:
-                    </Typography>
-                    <Chip
-                      label="Metaphor"
-                    />
-                  </Grid>
-                  <Grid className={classes.chips} item>
-                    <Typography>
-                      Issues:
-                    </Typography>
-                    <Chip
-                      label="Truncated Axis"
-                    />
-                    <Chip
-                      label="Misleading Area Encoding"
-                    />
-                  </Grid>
-                </Grid>
-              </Paper>
-            </Grid>
+      <Dialog
+        className={classes.dialog}
+        open={true}
+        maxWidth={false}
+        fullWidth={true}
+        PaperProps={{ className: classes.paper }}
+        TransitionComponent={Transition}
+        onClose={handleClose}
+      >
+        <div className={classes.root}>
+          <AppBar className={classes.appBar} elevation={0}>
+            <Toolbar disableGutters variant="dense">
+              <IconButton color="inherit" onClick={handleClose} aria-label="close">
+                <CloseIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Grid className={classes.imageDetail} container>
+            <ImageGrid className={classes.imageGrid} item sm={12} md={8} onClick={handleClose} src={`/${image.image_path}`} />
+            <CaptionGrid className={classes.captionGrid} item sm={12} md={4} image={image} />
           </Grid>
         </div>
-      </div>
+      </Dialog>
     </ThemeProvider>
   )
 }
 
 ImageDetail.propTypes = {
-  image: PropTypes.shape({
-    url: PropTypes.string.isRequired,
-    image_path: PropTypes.string.isRequired,
-    source: PropTypes.string.isRequired,
-    source_url: PropTypes.string.isRequired,
-    source_platform: PropTypes.string.isRequired
-  }),
+  image: PropTypes.object,
+  open: PropTypes.bool,
   handleClose: PropTypes.func
 }
 

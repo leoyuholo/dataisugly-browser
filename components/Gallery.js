@@ -2,9 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import Dialog from '@material-ui/core/Dialog'
-import Slide from '@material-ui/core/Slide'
-import { useRouter } from 'next/router'
 import { partial } from 'lodash'
 
 import ImageCard from './ImageCard'
@@ -19,13 +16,8 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Transition = React.forwardRef(function Transition (props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />
-})
-
 const Gallery = props => {
   const { images } = props
-  const router = useRouter()
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
   const [imageIdx, setImageIdx] = React.useState(-1)
@@ -33,7 +25,7 @@ const Gallery = props => {
   const handleClickOpen = index => {
     const image = images[index]
     const href = `/image/${image.image_name}`
-    router.push('/image/[...imageId]', href, { shallow: true })
+    window.history.pushState(null, '', href)
     setImageIdx(index)
     setOpen(true)
   }
@@ -42,7 +34,7 @@ const Gallery = props => {
     setOpen(false)
     setImageIdx(-1)
     const href = '/'
-    router.push(href, href, { shallow: true })
+    window.history.pushState(null, '', href)
   }
 
   return (
@@ -53,9 +45,7 @@ const Gallery = props => {
             <ImageCard image={images[index]} />
           </Grid>
         ))}
-        <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
-          <ImageDetail image={images[imageIdx]} handleClose={handleClose} />
-        </Dialog>
+        <ImageDetail open={open} image={images[imageIdx]} handleClose={handleClose} />
       </Grid>
     </Grid>
   )

@@ -1,25 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Dialog from '@material-ui/core/Dialog'
 import { useRouter } from 'next/router'
+import fetch from 'isomorphic-unfetch'
 
 import ImageDetail from '../../components/ImageDetail'
 import Loading from '../../components/Loading'
 
 const Image = props => {
+  if (!props.image) { return (<Loading />) }
+
   const { image } = props
   const router = useRouter()
-
-  if (!image) { return (<Loading />) }
 
   const handleClose = () => {
     router.push('/')
   }
 
   return (
-    <Dialog fullScreen open={true} onClose={handleClose}>
-      <ImageDetail image={image} handleClose={handleClose} />
-    </Dialog>
+    <ImageDetail open={true} image={image} handleClose={handleClose} />
   )
 }
 

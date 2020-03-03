@@ -22,6 +22,6 @@ module.exports = {
     'react'
   ],
   rules: {
-    'space-before-function-paren': ['warn', 'always']
+    'space-before-function-paren': ['error', 'always']
   }
 }
