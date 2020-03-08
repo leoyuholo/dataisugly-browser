@@ -61,7 +61,7 @@ const Gallery = props => {
   }, [intersection, handleFetchMore, imageLength, images])
 
   return (
-    <Grid className={classes.root} container spacing={2}>
+    <Grid className={classes.root} container>
       <Grid className={classes.container} item container xs={12} spacing={1}>
         {(images || []).map((image, index) => (
           <Grid key={index} item onClick={partial(handleClickOpen, index)}>

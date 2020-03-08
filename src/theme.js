@@ -1,6 +1,17 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
-const theme = createMuiTheme({})
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      // main: '#c7ea46'
+      main: '#b2ff59'
+    },
+    secondary: {
+      main: '#e040fb'
+      // main: '#ffd740'
+    }
+  }
+})
 
 const darkTheme = createMuiTheme({
   palette: {
@@ -15,7 +26,8 @@ const darkTheme = createMuiTheme({
   overrides: {
     MuiDialog: {
       paper: {
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        borderRadius: '0px'
       }
     }
   }

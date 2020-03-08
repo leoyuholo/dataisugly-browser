@@ -8,8 +8,6 @@ import Loading from '../../components/Loading'
 import config from '../../src/config'
 
 const Image = props => {
-  if (!props.image) { return (<Loading />) }
-
   const { image } = props
   const router = nextUseRouter()
 
@@ -17,7 +15,7 @@ const Image = props => {
     router.push(`${config.rootPath}/`)
   }
 
-  return (
+  return !image ? (<Loading />) : (
     <div>
       <Head>
         <title>Bad Vis Browser</title>

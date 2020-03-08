@@ -12,7 +12,7 @@
   ],
   "appPort": [3000],
   "remoteUser": "node",
-  "runArgs": ["--cpus=3", "--cpuset-cpus=0-2"],
+  "runArgs": ["--cpus=3", "--cpuset-cpus=0-2", "--memory=10g"],
   "settings": {
     "terminal.integrated.shell.linux": "/bin/zsh"
   },

@@ -22,7 +22,7 @@ config.imageLists.all = {
   url: `${config.imageLists.root.url}/image_lists/all.json`
 }
 
-config.imageMetas = {
+config.imageMeta = {
   baseUrl: `${config.urlPrefix}/bad-vis-images/meta`
 }
 

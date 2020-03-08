@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: 'transparent'
   },
   appBar: {
-    position: 'absolute',
+    position: 'fixed',
     backgroundColor: 'rgba(0, 0, 0, 0)'
   },
   imageDetail: {
