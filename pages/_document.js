@@ -1,7 +1,7 @@
 import React from 'react'
 import Document, { Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
-import theme from '../src/theme'
+import { theme } from '../src/theme'
 
 export default class MyDocument extends Document {
   render () {
@@ -9,7 +9,6 @@ export default class MyDocument extends Document {
       <html lang="en">
         <Head>
           {/* PWA primary color */}
-          <title>Bad Vis Browser</title>
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link
             rel="stylesheet"

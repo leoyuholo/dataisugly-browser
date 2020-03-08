@@ -6,4 +6,4 @@ sudo chown $USERNAME \
   node_modules \
   .next
 
-yarn
+npm i

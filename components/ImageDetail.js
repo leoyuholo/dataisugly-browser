@@ -1,16 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+import { Grow } from '@material-ui/core'
 import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
+import Dialog from '@material-ui/core/Dialog'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
+import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
-import Dialog from '@material-ui/core/Dialog'
-import { Grow } from '@material-ui/core'
-
-import ImageGrid from './LightBox/ImageGrid'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { darkTheme } from '../src/theme'
 import CaptionGrid from './LightBox/CaptionGrid'
+import ImageGrid from './LightBox/ImageGrid'
 
 const useStyles = makeStyles(theme => ({
   dialog: {
@@ -59,22 +59,10 @@ const Transition = React.forwardRef(function Transition (props, ref) {
 })
 
 const ImageDetail = props => {
-  if (!props.open) { return null }
-
   const { image, handleClose } = props
   const classes = useStyles()
-  const darkTheme = createMuiTheme({
-    palette: {
-      type: 'dark'
-    },
-    overrides: {
-      MuiDialog: {
-        paper: {
-          backgroundColor: 'transparent'
-        }
-      }
-    }
-  })
+
+  if (!props.open) { return null }
 
   return (
     <ThemeProvider theme={darkTheme}>

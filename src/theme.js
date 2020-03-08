@@ -1,22 +1,24 @@
 import { createMuiTheme } from '@material-ui/core/styles'
-import { red } from '@material-ui/core/colors'
 
-// Create a theme instance.
-const theme = createMuiTheme({
+const theme = createMuiTheme({})
+
+const darkTheme = createMuiTheme({
   palette: {
+    type: 'dark',
     primary: {
-      main: '#556cd6'
+      main: '#90caf9'
     },
     secondary: {
-      main: '#19857b'
-    },
-    error: {
-      main: red.A400
-    },
-    background: {
-      default: '#fff'
+      main: '#f48fb1'
+    }
+  },
+  overrides: {
+    MuiDialog: {
+      paper: {
+        backgroundColor: 'transparent'
+      }
     }
   }
 })
 
-export default theme
+export { theme, darkTheme }

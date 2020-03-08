@@ -1,14 +1,14 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
 import CardMedia from '@material-ui/core/CardMedia'
+import { makeStyles } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import React from 'react'
+import config from '../src/config'
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 140,
-    maxWidth: 345
+    width: config.thumbnails.size.width
   }
 })
 
@@ -21,8 +21,8 @@ const ImageCard = props => {
       <CardActionArea>
         <CardMedia
           component="img"
-          height="140"
-          width="140"
+          width={config.thumbnails.size.width}
+          height={config.thumbnails.size.height}
           image={image.thumbnail_path}
         />
       </CardActionArea>
