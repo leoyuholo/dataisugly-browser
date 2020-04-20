@@ -45,19 +45,19 @@ const CaptionGrid = props => {
             </Typography>
             <Chip
               label={image.source_platform}
-              component="a"
+              component='a'
               href={image.source_url}
               clickable
-              color="primary"
-              target="_blank"
+              color='primary'
+              target='_blank'
             />
             <Chip
               label={`${image.source}/comments/${image.id}`}
-              component="a"
+              component='a'
               href={image.url}
               clickable
-              color="secondary"
-              target="_blank"
+              color='secondary'
+              target='_blank'
             />
           </Grid>
           <Grid className={classes.chips} item>
@@ -65,10 +65,10 @@ const CaptionGrid = props => {
               Data Type:
             </Typography>
             <Chip
-              label="Categorical"
+              label='Categorical'
             />
             <Chip
-              label="Quantitative"
+              label='Quantitative'
             />
           </Grid>
           <Grid className={classes.chips} item>
@@ -76,7 +76,7 @@ const CaptionGrid = props => {
               Chart Type:
             </Typography>
             <Chip
-              label="Bar Chart"
+              label='Bar Chart'
             />
           </Grid>
           <Grid className={classes.chips} item>
@@ -84,7 +84,7 @@ const CaptionGrid = props => {
               Other:
             </Typography>
             <Chip
-              label="Metaphor"
+              label='Metaphor'
             />
           </Grid>
           <Grid className={classes.chips} item>
@@ -92,10 +92,10 @@ const CaptionGrid = props => {
               Issues:
             </Typography>
             <Chip
-              label="Truncated Axis"
+              label='Truncated Axis'
             />
             <Chip
-              label="Misleading Area Encoding"
+              label='Misleading Area Encoding'
             />
           </Grid>
         </Grid>

@@ -20,7 +20,7 @@ const ImageCard = props => {
     <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
-          component="img"
+          component='img'
           width={config.thumbnails.size.width}
           height={config.thumbnails.size.height}
           image={image.thumbnail_path}

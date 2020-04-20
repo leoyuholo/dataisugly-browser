@@ -30,7 +30,7 @@ const ImageGrid = props => {
   return (
     <Grid {...rootProps} className={clsx(rootProps.className, classes.root)}>
       <Grid>
-        <img className={classes.img} alt="Missing Image." src={src} onClick={e => e.stopPropagation()} />
+        <img className={classes.img} alt='Missing Image.' src={src} onClick={e => e.stopPropagation()} />
       </Grid>
     </Grid>
   )

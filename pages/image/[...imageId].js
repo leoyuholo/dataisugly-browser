@@ -20,7 +20,7 @@ const Image = props => {
       <Head>
         <title>Bad Vis Browser</title>
       </Head>
-      <ImageDetail open={true} image={image} handleClose={handleClose} />
+      <ImageDetail open image={image} handleClose={handleClose} />
     </div>
   )
 }

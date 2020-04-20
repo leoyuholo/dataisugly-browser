@@ -8,7 +8,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "standard"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.11",
@@ -26,13 +26,9 @@
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.9.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.8.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.19.0",
-    "eslint-plugin-react-hooks": "^2.5.1",
-    "eslint-plugin-standard": "^4.0.1"
+    "standard": "^14.3.3"
+  },
+  "standard": {
+    "parser": "babel-eslint"
   }
 }

@@ -29,7 +29,7 @@ function HideOnScroll (props) {
   const trigger = muiUseScrollTrigger()
 
   return (
-    <Slide appear={false} direction="down" in={!trigger}>
+    <Slide appear={false} direction='down' in={!trigger}>
       {children}
     </Slide>
   )
@@ -48,22 +48,21 @@ const TitleBar = props => {
     <HideOnScroll>
       <AppBar className={classes.appBar}>
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" size="medium">
+          <IconButton edge='start' className={classes.menuButton} color='inherit' size='medium'>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant='h6' className={classes.title}>
             BAD VIS BROWSER
           </Typography>
           {isWide &&
             <Grid className={classes.signature}>
-              <Typography variant="body2">
-                A community effort of <Link href="https://www.reddit.com/r/dataisugly/" target="_blank" color="secondary">r/dataisugly</Link>
+              <Typography variant='body2'>
+                A community effort of <Link href='https://www.reddit.com/r/dataisugly/' target='_blank' color='secondary'>r/dataisugly</Link>
               </Typography>
-              <Typography variant="body2">
-                Curated by <Link href="https://leoyuholo.com/" target="_blank" color="inherit">Leo Yu-Ho Lo</Link>@<Link href="http://hkustvis.org/" target="_blank" color="inherit">VisLab</Link>
+              <Typography variant='body2'>
+                Curated by <Link href='https://leoyuholo.com/' target='_blank' color='inherit'>Leo Yu-Ho Lo</Link>@<Link href='http://hkustvis.org/' target='_blank' color='inherit'>VisLab</Link>
               </Typography>
-            </Grid>
-          }
+            </Grid>}
         </Toolbar>
       </AppBar>
     </HideOnScroll>

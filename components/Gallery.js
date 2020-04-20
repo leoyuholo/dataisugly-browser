@@ -68,12 +68,13 @@ const Gallery = props => {
             <ImageCard image={images[index]} />
           </Grid>
         ))}
-        {hasMoreImages &&
-          <Grid item ref={intersectionRef}>
-            <Grid className={classes.sentinel}>
-              {isFetching ? <CircularProgress color="secondary" /> : <Typography>More Vis</Typography>}
+        {
+          hasMoreImages &&
+            <Grid item ref={intersectionRef}>
+              <Grid className={classes.sentinel}>
+                {isFetching ? <CircularProgress color='secondary' /> : <Typography>More Vis</Typography>}
+              </Grid>
             </Grid>
-          </Grid>
         }
         <ImageDetail open={open} image={images[imageIdx]} handleClose={handleClose} />
       </Grid>

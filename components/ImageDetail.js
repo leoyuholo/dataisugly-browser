@@ -55,7 +55,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Transition = React.forwardRef(function Transition (props, ref) {
-  return <Grow direction="up" ref={ref} {...props} />
+  return <Grow direction='up' ref={ref} {...props} />
 })
 
 const ImageDetail = props => {
@@ -68,17 +68,17 @@ const ImageDetail = props => {
     <ThemeProvider theme={darkTheme}>
       <Dialog
         className={classes.dialog}
-        open={true}
+        open
         maxWidth={false}
-        fullWidth={true}
+        fullWidth
         PaperProps={{ className: classes.paper }}
         TransitionComponent={Transition}
         onClose={handleClose}
       >
         <div className={classes.root}>
           <AppBar className={classes.appBar} elevation={0}>
-            <Toolbar disableGutters variant="dense">
-              <IconButton color="inherit" onClick={handleClose} aria-label="close">
+            <Toolbar disableGutters variant='dense'>
+              <IconButton color='inherit' onClick={handleClose} aria-label='close'>
                 <CloseIcon />
               </IconButton>
             </Toolbar>
