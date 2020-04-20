@@ -71,7 +71,7 @@ const Gallery = props => {
         {hasMoreImages &&
           <Grid item ref={intersectionRef}>
             <Grid className={classes.sentinel}>
-              {isFetching ? <CircularProgress /> : <Typography>More Vis</Typography>}
+              {isFetching ? <CircularProgress color="secondary" /> : <Typography>More Vis</Typography>}
             </Grid>
           </Grid>
         }

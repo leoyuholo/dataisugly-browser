@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import classNames from 'classnames'
+import { makeStyles } from '@material-ui/core/styles'
+import clsx from 'clsx'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,7 +28,7 @@ const ImageGrid = props => {
   const classes = useStyles()
 
   return (
-    <Grid {...rootProps} className={classNames(rootProps.className, classes.root)}>
+    <Grid {...rootProps} className={clsx(rootProps.className, classes.root)}>
       <Grid>
         <img className={classes.img} alt="Missing Image." src={src} onClick={e => e.stopPropagation()} />
       </Grid>

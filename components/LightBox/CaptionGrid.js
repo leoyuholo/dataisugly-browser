@@ -1,11 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
+import Chip from '@material-ui/core/Chip'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
-import Chip from '@material-ui/core/Chip'
+import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import classNames from 'classnames'
+import clsx from 'clsx'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,7 +36,7 @@ const CaptionGrid = props => {
   const classes = useStyles()
 
   return (
-    <Grid {...rootProps} className={classNames(rootProps.className, classes.root)}>
+    <Grid {...rootProps} className={clsx(rootProps.className, classes.root)}>
       <Paper className={classes.paper} elevation={0}>
         <Grid className={classes.labels} container>
           <Grid className={classes.chips} item>
