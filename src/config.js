@@ -26,4 +26,8 @@ config.imageMeta = {
   baseUrl: `${config.urlPrefix}/bad-vis-images/meta`
 }
 
+config.labels = {
+  url: `${config.urlPrefix}/bad-vis-images/labels/all.json`
+}
+
 export default config

@@ -6,6 +6,7 @@ import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
 import MenuIcon from '@material-ui/icons/Menu'
 import PropTypes from 'prop-types'
 import React from 'react'
+import FilterMenu from './FilterMenu'
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -40,17 +41,27 @@ HideOnScroll.propTypes = {
 }
 
 const TitleBar = props => {
-  const { width } = props
+  const { width, onFilter } = props
   const isWide = isWidthUp('sm', width)
   const classes = useStyles()
+  const [menuState, setMenuState] = React.useState(false)
+
+  const toggleMenu = (state) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return
+    }
+
+    setMenuState(state)
+  }
 
   return (
     <HideOnScroll>
-      <AppBar className={classes.appBar}>
+      <AppBar position='fixed' className={classes.appBar}>
         <Toolbar>
-          <IconButton edge='start' className={classes.menuButton} color='inherit' size='medium'>
+          <IconButton edge='start' className={classes.menuButton} color='inherit' size='medium' onClick={toggleMenu(true)}>
             <MenuIcon />
           </IconButton>
+          <FilterMenu isWide={isWide} open={menuState} onClose={toggleMenu(false)} onFilter={onFilter} />
           <Typography variant='h6' className={classes.title}>
             BAD VIS BROWSER
           </Typography>
@@ -60,7 +71,7 @@ const TitleBar = props => {
                 A community effort of <Link href='https://www.reddit.com/r/dataisugly/' target='_blank' color='secondary'>r/dataisugly</Link>
               </Typography>
               <Typography variant='body2'>
-                Curated by <Link href='https://leoyuholo.com/' target='_blank' color='inherit'>Leo Yu-Ho Lo</Link>@<Link href='http://hkustvis.org/' target='_blank' color='inherit'>VisLab</Link>
+                Curated by <Link href='https://leoyuholo.com/' target='_blank' color='inherit'>Leo Yu-Ho Lo</Link>@<Link href='http://hkustvis.org/' target='_blank' color='inherit'>HKUST VisLab</Link>
               </Typography>
             </Grid>}
         </Toolbar>
@@ -70,7 +81,8 @@ const TitleBar = props => {
 }
 
 TitleBar.propTypes = {
-  width: PropTypes.string
+  width: PropTypes.string,
+  onFilter: PropTypes.func
 }
 
 export default withWidth()(TitleBar)

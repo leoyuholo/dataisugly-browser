@@ -7,6 +7,7 @@ import Gallery from '../components/Gallery'
 import Loading from '../components/Loading'
 import TitleBar from '../components/TitleBar'
 import config from '../src/config'
+import filterImageList from '../src/lib/filterImageList'
 import { theme } from '../src/theme'
 
 const useStyles = makeStyles(theme => ({
@@ -18,10 +19,13 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Index = props => {
-  const { images, next } = props
+  const { imageList: { images, next } } = props
+  // const { imageList: { images, next }, labels } = props
   const classes = useStyles()
 
   const [imageList, setImageList] = useState(images)
+  const [imageListFilter, setImageListFilter] = useState({})
+  const [filteredImageList, setFilteredImageList] = useState(images)
   const [nextUrl, setNextUrl] = useState(`${config.imageLists.root.url}/${next}`)
   const [toFetch, setToFetch] = useState(0)
   const [isFetching, setIsFetching] = useState(false)
@@ -32,8 +36,9 @@ const Index = props => {
       const res = await fetch(nextUrl)
       const json = await res.json()
 
-      setImageList(imageList.concat(json.images))
-      setNextUrl(`${config.imageLists.root.url}/${json.next}`)
+      setImageList(nextUrl === config.imageLists.all.url ? json.images : imageList.concat(json.images))
+      filterImages(imageListFilter)
+      setNextUrl(json.next ? `${config.imageLists.root.url}/${json.next}` : null)
 
       setToFetch(false)
       setIsFetching(false)
@@ -45,9 +50,22 @@ const Index = props => {
   }, [toFetch, isFetching, nextUrl, imageList])
 
   const handleFetchMore = (imageLength) => {
-    if (imageList.length === imageLength) {
+    if (filteredImageList.length === imageLength) {
       setToFetch(true)
     }
+  }
+
+  const filterImages = (filter) => {
+    const filtered = filterImageList(imageList, filter)
+    if (nextUrl && nextUrl !== config.imageLists.all.url && (filtered.length / imageList.length) < 0.2) {
+      setNextUrl(config.imageLists.all.url)
+    }
+    setFilteredImageList(filtered)
+  }
+
+  const handleImageFilter = (filter) => {
+    setImageListFilter(filter)
+    filterImages(filter)
   }
 
   return !imageList ? (<Loading />) : (
@@ -56,23 +74,35 @@ const Index = props => {
         <Head>
           <title>Bad Vis Browser</title>
         </Head>
-        <TitleBar />
+        <TitleBar onFilter={handleImageFilter} />
         <div className={classes.toolbar} />
-        <Gallery images={imageList} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} />
+        <Gallery imageList={filteredImageList} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} />
+        {/* <Gallery images={imageList} labels={labels} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} /> */}
       </div>
     </ThemeProvider>
   )
 }
 
 Index.propTypes = {
-  images: PropTypes.array,
-  next: PropTypes.string
+  imageList: PropTypes.shape({
+    images: PropTypes.array,
+    next: PropTypes.string
+  })
+  // labels: PropTypes.array
 }
 
 Index.getInitialProps = async ctx => {
-  const res = await fetch(config.imageLists.page[0].url)
-  const json = await res.json()
-  return json
+  try {
+    const [imageList, labels] = await Promise.all([
+      fetch(config.imageLists.page[0].url).then(r => r.json())
+      // fetch(config.labels.url).then(r => r.json())
+    ])
+
+    return { imageList, labels }
+  } catch (error) {
+    console.log('getInitialProps error: ', error)
+    return { error }
+  }
 }
 
 export default Index

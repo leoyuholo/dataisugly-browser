@@ -8,7 +8,7 @@ import Loading from '../../components/Loading'
 import config from '../../src/config'
 
 const Image = props => {
-  const { image } = props
+  const { image, labels = [] } = props
   const router = nextUseRouter()
 
   const handleClose = () => {
@@ -20,13 +20,14 @@ const Image = props => {
       <Head>
         <title>Bad Vis Browser</title>
       </Head>
-      <ImageDetail open image={image} handleClose={handleClose} />
+      <ImageDetail open image={image} labels={labels} handleClose={handleClose} />
     </div>
   )
 }
 
 Image.propTypes = {
-  image: PropTypes.object.isRequired
+  image: PropTypes.object.isRequired,
+  labels: PropTypes.object
 }
 
 Image.getInitialProps = async ctx => {

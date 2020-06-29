@@ -26,13 +26,14 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Gallery = props => {
-  const { images, hasMoreImages = false, isFetching = false, handleFetchMore = () => {} } = props
+  const { imageList, labels = [], hasMoreImages = false, isFetching = false, handleFetchMore = () => {} } = props
   const classes = useStyles()
+  const imagesLimit = 1000
 
   const [open, setOpen] = useState(false)
   const [imageIdx, setImageIdx] = useState(-1)
   const handleClickOpen = index => {
-    const image = images[index]
+    const image = imageList[index]
     const href = `${config.rootPath}/image/${image.image_name}`
     window.history.pushState(null, '', href)
     setImageIdx(index)
@@ -51,39 +52,50 @@ const Gallery = props => {
     rootMargin: '0px',
     threshold: 0.8
   })
-  const [imageLength, setImageLength] = useState(images.length)
+  const [imageLength, setImageLength] = useState(imageList.length)
   useEffect(() => {
     if (intersection?.isIntersecting) {
       handleFetchMore(imageLength)
     } else {
-      setImageLength(images.length)
+      setImageLength(imageList.length)
     }
-  }, [intersection, handleFetchMore, imageLength, images])
+    // console.log('Gallery useEffect', imageList.length, imageLength, intersection)
+  }, [intersection, handleFetchMore, imageLength, imageList])
 
   return (
     <Grid className={classes.root} container>
       <Grid className={classes.container} item container xs={12} spacing={1}>
-        {(images || []).map((image, index) => (
+        {(imageList || []).slice(0, !hasMoreImages ? imagesLimit : undefined).map((image, index) => (
           <Grid key={index} item onClick={partial(handleClickOpen, index)}>
-            <ImageCard image={images[index]} />
+            <ImageCard image={imageList[index]} />
           </Grid>
         ))}
         {
-          hasMoreImages &&
-            <Grid item ref={intersectionRef}>
-              <Grid className={classes.sentinel}>
-                {isFetching ? <CircularProgress color='secondary' /> : <Typography>More Vis</Typography>}
+          (
+            hasMoreImages &&
+              <Grid item ref={intersectionRef}>
+                <Grid className={classes.sentinel}>
+                  {isFetching ? <CircularProgress color='secondary' /> : <Typography>More Vis</Typography>}
+                </Grid>
               </Grid>
-            </Grid>
+          ) || (
+            imageList.length >= imagesLimit &&
+              <Grid item>
+                <Grid className={classes.sentinel}>
+                  <Typography>Try the Filter!</Typography>
+                </Grid>
+              </Grid>
+          )
         }
-        <ImageDetail open={open} image={images[imageIdx]} handleClose={handleClose} />
+        <ImageDetail open={open} image={imageList[imageIdx]} labels={labels} handleClose={handleClose} />
       </Grid>
     </Grid>
   )
 }
 
 Gallery.propTypes = {
-  images: PropTypes.array.isRequired,
+  imageList: PropTypes.array.isRequired,
+  labels: PropTypes.object,
   hasMoreImages: PropTypes.bool,
   isFetching: PropTypes.bool,
   handleFetchMore: PropTypes.func
