@@ -61,7 +61,7 @@ const TitleBar = props => {
           <IconButton edge='start' className={classes.menuButton} color='inherit' size='medium' onClick={toggleMenu(true)}>
             <MenuIcon />
           </IconButton>
-          <FilterMenu isWide={isWide} open={menuState} onClose={toggleMenu(false)} onFilter={onFilter} />
+          <FilterMenu open={menuState} onClose={toggleMenu(false)} onFilter={onFilter} />
           <Typography variant='h6' className={classes.title}>
             BAD VIS BROWSER
           </Typography>

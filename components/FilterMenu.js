@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 const FilterMenu = props => {
-  const { isWide, open, onClose, onFilter } = props
+  const { open, onClose, onFilter } = props
   const [filterState, setFilterState] = React.useState({
     // startDate: new Date('2012-11-23T00:00:00'),
     startDate: new Date('2020-05-30T00:00:00'),
