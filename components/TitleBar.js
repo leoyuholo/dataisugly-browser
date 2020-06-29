@@ -2,15 +2,16 @@ import { AppBar, Grid, IconButton, Link, Toolbar, Typography } from '@material-u
 import Slide from '@material-ui/core/Slide'
 import { makeStyles } from '@material-ui/core/styles'
 import muiUseScrollTrigger from '@material-ui/core/useScrollTrigger'
-import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
+import withWidth from '@material-ui/core/withWidth'
 import MenuIcon from '@material-ui/icons/Menu'
 import PropTypes from 'prop-types'
 import React from 'react'
-import FilterMenu from './FilterMenu'
+import ConditionalWrapper from './ConditionalWrapper'
 
 const useStyles = makeStyles(theme => ({
   appBar: {
     // backgroundColor: '#90caf9'
+    zIndex: theme.zIndex.drawer + 1
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -41,27 +42,17 @@ HideOnScroll.propTypes = {
 }
 
 const TitleBar = props => {
-  const { width, onFilter } = props
-  const isWide = isWidthUp('sm', width)
+  const { isWide, toggleMenu, appBarProps } = props
   const classes = useStyles()
-  const [menuState, setMenuState] = React.useState(false)
-
-  const toggleMenu = (state) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return
-    }
-
-    setMenuState(state)
-  }
 
   return (
-    <HideOnScroll>
-      <AppBar position='fixed' className={classes.appBar}>
+    <ConditionalWrapper condition={!isWide} wrapper={children => <HideOnScroll>{children}</HideOnScroll>}>
+      <AppBar position='fixed' className={classes.appBar} {...appBarProps}>
         <Toolbar>
-          <IconButton edge='start' className={classes.menuButton} color='inherit' size='medium' onClick={toggleMenu(true)}>
-            <MenuIcon />
-          </IconButton>
-          <FilterMenu open={menuState} onClose={toggleMenu(false)} onFilter={onFilter} />
+          {!isWide &&
+            <IconButton edge='start' className={classes.menuButton} color='inherit' size='medium' onClick={toggleMenu}>
+              <MenuIcon />
+            </IconButton>}
           <Typography variant='h6' className={classes.title}>
             BAD VIS BROWSER
           </Typography>
@@ -76,13 +67,14 @@ const TitleBar = props => {
             </Grid>}
         </Toolbar>
       </AppBar>
-    </HideOnScroll>
+    </ConditionalWrapper>
   )
 }
 
 TitleBar.propTypes = {
   width: PropTypes.string,
-  onFilter: PropTypes.func
+  toggleMenu: PropTypes.func,
+  appBarProps: PropTypes.object
 }
 
 export default withWidth()(TitleBar)

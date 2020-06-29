@@ -1,8 +1,11 @@
+import CssBaseline from '@material-ui/core/CssBaseline'
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
 import fetch from 'isomorphic-unfetch'
 import Head from 'next/head'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
+import FilterMenu from '../components/FilterMenu'
 import Gallery from '../components/Gallery'
 import Loading from '../components/Loading'
 import TitleBar from '../components/TitleBar'
@@ -10,18 +13,26 @@ import config from '../src/config'
 import filterImageList from '../src/lib/filterImageList'
 import { theme } from '../src/theme'
 
+const drawerWidth = 240
+
 const useStyles = makeStyles(theme => ({
   root: {
+    display: 'flex',
     flexGrow: 1,
     paddingTop: theme.spacing(1)
   },
-  toolbar: theme.mixins.toolbar
+  toolbar: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3)
+  }
 }))
 
 const Index = props => {
   const { imageList: { images, next } } = props
   // const { imageList: { images, next }, labels } = props
   const classes = useStyles()
+  const isWide = isWidthUp('sm', props.width)
 
   const [imageList, setImageList] = useState(images)
   const [imageListFilter, setImageListFilter] = useState({})
@@ -68,16 +79,29 @@ const Index = props => {
     filterImages(filter)
   }
 
+  const [menuState, setMenuState] = React.useState(false)
+  const toggleMenu = (state) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return
+    }
+
+    setMenuState(state)
+  }
+
   return !imageList ? (<Loading />) : (
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
+        <CssBaseline />
         <Head>
           <title>Bad Vis Browser</title>
         </Head>
-        <TitleBar onFilter={handleImageFilter} />
-        <div className={classes.toolbar} />
-        <Gallery imageList={filteredImageList} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} />
-        {/* <Gallery images={imageList} labels={labels} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} /> */}
+        <TitleBar isWide={isWide} toggleMenu={toggleMenu(true)} />
+        <FilterMenu isWide={isWide} open={menuState} onClose={toggleMenu(false)} onFilter={handleImageFilter} />
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <Gallery imageList={filteredImageList} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} />
+          {/* <Gallery images={imageList} labels={labels} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} /> */}
+        </main>
       </div>
     </ThemeProvider>
   )
@@ -105,4 +129,4 @@ Index.getInitialProps = async ctx => {
   }
 }
 
-export default Index
+export default withWidth()(Index)
