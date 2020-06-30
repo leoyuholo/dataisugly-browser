@@ -1,7 +1,6 @@
 import { CircularProgress, Typography } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
-import { partial } from 'lodash'
 import PropTypes from 'prop-types'
 import React, { useEffect, useRef, useState } from 'react'
 import { useIntersection } from 'react-use'
@@ -32,7 +31,7 @@ const Gallery = props => {
 
   const [open, setOpen] = useState(false)
   const [imageIdx, setImageIdx] = useState(-1)
-  const handleClickOpen = index => {
+  const handleClickOpen = (index) => (event) => {
     const image = imageList[index]
     const href = `${config.rootPath}/image/${image.image_name}`
     window.history.pushState(null, '', href)
@@ -66,8 +65,8 @@ const Gallery = props => {
     <Grid className={classes.root} container>
       <Grid className={classes.container} item container xs={12} spacing={1}>
         {(imageList || []).slice(0, !hasMoreImages ? imagesLimit : undefined).map((image, index) => (
-          <Grid key={index} item onClick={partial(handleClickOpen, index)}>
-            <ImageCard image={imageList[index]} />
+          <Grid key={image.image_name} item onClick={handleClickOpen(index)}>
+            <ImageCard image={image} />
           </Grid>
         ))}
         {
@@ -82,7 +81,7 @@ const Gallery = props => {
             imageList.length >= imagesLimit &&
               <Grid item>
                 <Grid className={classes.sentinel}>
-                  <Typography>Try the Filter!</Typography>
+                  <Typography>Image Overflow! Try the Filter!</Typography>
                 </Grid>
               </Grid>
           )

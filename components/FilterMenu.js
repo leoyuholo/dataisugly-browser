@@ -1,13 +1,14 @@
-import DateFnsUtils from '@date-io/date-fns'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import { makeStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import { debounce } from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
+import config from '../src/config'
+import DateRangeSlider from './FilterMenuWidgets/DateRangeSlider'
 
 const drawerWidth = 240
 
@@ -31,28 +32,21 @@ const useStyles = makeStyles(theme => ({
     overflow: 'auto'
   }
 }))
-
 const FilterMenu = props => {
   const { isWide, open, onClose, onFilter, drawerProps } = props
   const classes = useStyles()
 
   const [filterState, setFilterState] = React.useState({
-    // startDate: new Date('2012-11-23T00:00:00'),
-    startDate: new Date('2020-05-30T00:00:00'),
+    startDate: new Date(config.imageLists.dateRange.startDate),
     endDate: new Date()
   })
 
-  const handleStartDateChange = (date) => {
-    const filter = { ...filterState, startDate: date }
+  const handleDateRangeChange = debounce((newDateRange) => {
+    const filter = { ...filterState, startDate: newDateRange[0], endDate: newDateRange[1] }
     setFilterState(filter)
     onFilter(filter)
-  }
-
-  const handleEndDateChange = (date) => {
-    const filter = { ...filterState, endDate: date }
-    setFilterState(filter)
-    onFilter(filter)
-  }
+    // console.log('filterMenu handleDateRangeChange', newDateRange.map(d => d.toISOString()))
+  }, 1000)
 
   return (
     <Drawer
@@ -71,34 +65,12 @@ const FilterMenu = props => {
             <Typography>Filter</Typography>
           </ListItem>
           <ListItem>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                margin='normal'
-                id='date-picker-filter-menu-start-date'
-                label='Date range from:'
-                format='MM/dd/yyyy'
-                value={filterState.startDate}
-                onChange={handleStartDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date range from'
-                }}
-              />
-            </MuiPickersUtilsProvider>
+            <Typography gutterBottom>
+              Date
+            </Typography>
           </ListItem>
           <ListItem>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                margin='normal'
-                id='date-picker-filter-menu-end-date'
-                label='Date range to:'
-                format='MM/dd/yyyy'
-                value={filterState.endDate}
-                onChange={handleEndDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date range to'
-                }}
-              />
-            </MuiPickersUtilsProvider>
+            <DateRangeSlider dateRange={config.imageLists.dateRange} onChange={handleDateRangeChange} />
           </ListItem>
         </List>
       </div>

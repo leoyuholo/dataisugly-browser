@@ -13,8 +13,6 @@ import config from '../src/config'
 import filterImageList from '../src/lib/filterImageList'
 import { theme } from '../src/theme'
 
-const drawerWidth = 240
-
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
