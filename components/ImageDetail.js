@@ -14,7 +14,8 @@ import ImageGrid from './LightBox/ImageGrid'
 
 const useStyles = makeStyles(theme => ({
   dialog: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    backdropFilter: 'blur(6px)'
   },
   paper: {
     margin: 0,
@@ -51,6 +52,9 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('md')]: {
       minHeight: '100vh'
     }
+  },
+  closeIcon: {
+    color: 'gray'
   }
 }))
 
@@ -87,7 +91,7 @@ const ImageDetail = props => {
           <AppBar className={classes.appBar} elevation={0}>
             <Toolbar disableGutters variant='dense'>
               <IconButton color='inherit' onClick={handleClose} aria-label='close'>
-                <CloseIcon />
+                <CloseIcon className={classes.closeIcon} />
               </IconButton>
             </Toolbar>
           </AppBar>

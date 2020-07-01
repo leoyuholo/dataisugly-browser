@@ -45,9 +45,13 @@ const Index = props => {
       const res = await fetch(nextUrl)
       const json = await res.json()
 
-      setImageList(nextUrl === config.imageLists.all.url ? json.images : imageList.concat(json.images))
-      filterImages(imageListFilter)
-      setNextUrl(json.next ? `${config.imageLists.root.url}/${json.next}` : null)
+      const newImageList = nextUrl === config.imageLists.all.url ? json.images : imageList.concat(json.images)
+      const newFilteredImageList = filterImageList(newImageList, imageListFilter)
+      const newNextUrl = json.next ? `${config.imageLists.root.url}/${json.next}` : null
+
+      setImageList(newImageList)
+      setFilteredImageList(newFilteredImageList)
+      setNextUrl(newNextUrl)
 
       setToFetch(false)
       setIsFetching(false)
@@ -64,17 +68,14 @@ const Index = props => {
     }
   }
 
-  const filterImages = (filter) => {
-    const filtered = filterImageList(imageList, filter)
-    if (nextUrl && nextUrl !== config.imageLists.all.url && (filtered.length / imageList.length) < 0.2) {
+  const handleImageFilter = (newFilter) => {
+    const newFilteredImageList = filterImageList(imageList, newFilter)
+
+    if (nextUrl && nextUrl !== config.imageLists.all.url && (newFilteredImageList.length / imageList.length) < 0.2) {
       setNextUrl(config.imageLists.all.url)
     }
-    setFilteredImageList(filtered)
-  }
-
-  const handleImageFilter = (filter) => {
-    setImageListFilter(filter)
-    filterImages(filter)
+    setImageListFilter(newFilter)
+    setFilteredImageList(newFilteredImageList)
   }
 
   const [menuState, setMenuState] = React.useState(false)

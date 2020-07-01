@@ -30,6 +30,10 @@ const darkTheme = createMuiTheme({
         borderRadius: '0px'
       }
     }
+  },
+  zIndex: {
+    modal: 2300,
+    tooltip: 2500
   }
 })
 
