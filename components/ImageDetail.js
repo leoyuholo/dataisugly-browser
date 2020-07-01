@@ -64,17 +64,9 @@ const Transition = React.forwardRef(function Transition (props, ref) {
 
 const ImageDetail = props => {
   const { image, handleClose } = props
-  // const { image, labels = {}, handleClose } = props
   const classes = useStyles()
 
   if (!props.open) { return null }
-
-  // const getLabelDetails = tags =>
-  //   flow([
-  //     map(t => labels[t]),
-  //     compact(),
-  //     groupBy('type')
-  //   ])(tags)
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -98,7 +90,6 @@ const ImageDetail = props => {
           <Grid className={classes.imageDetail} container>
             <ImageGrid className={classes.imageGrid} item sm={12} md={8} onClick={handleClose} src={`/${image.image_path}`} />
             <CaptionGrid className={classes.captionGrid} item sm={12} md={4} image={image} />
-            {/* <CaptionGrid className={classes.captionGrid} item sm={12} md={4} image={{ ...image, labels: getLabelDetails(image.labels) }} /> */}
           </Grid>
         </div>
       </Dialog>
@@ -108,7 +99,6 @@ const ImageDetail = props => {
 
 ImageDetail.propTypes = {
   image: PropTypes.object,
-  labels: PropTypes.array,
   open: PropTypes.bool,
   handleClose: PropTypes.func
 }

@@ -27,8 +27,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Index = props => {
-  const { imageList: { images, next } } = props
-  // const { imageList: { images, next }, labels } = props
+  const { imageList: { images, next }, labelOptions } = props
   const classes = useStyles()
   const isWide = isWidthUp('sm', props.width)
 
@@ -95,11 +94,10 @@ const Index = props => {
           <title>Bad Vis Browser</title>
         </Head>
         <TitleBar isWide={isWide} toggleMenu={toggleMenu(true)} />
-        <FilterMenu isWide={isWide} open={menuState} onClose={toggleMenu(false)} onFilter={handleImageFilter} />
+        <FilterMenu isWide={isWide} open={menuState} labelOptions={labelOptions} onClose={toggleMenu(false)} onFilter={handleImageFilter} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Gallery imageList={filteredImageList} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} />
-          {/* <Gallery images={imageList} labels={labels} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} /> */}
         </main>
       </div>
     </ThemeProvider>
@@ -110,18 +108,18 @@ Index.propTypes = {
   imageList: PropTypes.shape({
     images: PropTypes.array,
     next: PropTypes.string
-  })
-  // labels: PropTypes.array
+  }),
+  labels: PropTypes.object
 }
 
 Index.getInitialProps = async ctx => {
   try {
-    const [imageList, labels] = await Promise.all([
-      fetch(config.imageLists.page[0].url).then(r => r.json())
-      // fetch(config.labels.url).then(r => r.json())
+    const [imageList, labelOptions] = await Promise.all([
+      fetch(config.imageLists.page[0].url).then(r => r.json()),
+      fetch(config.labelOptions.url).then(r => r.json())
     ])
 
-    return { imageList, labels }
+    return { imageList, labelOptions }
   } catch (error) {
     console.log('getInitialProps error: ', error)
     return { error }

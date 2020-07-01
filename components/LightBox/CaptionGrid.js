@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import clsx from 'clsx'
+import { groupBy, truncate } from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
 
@@ -31,9 +32,31 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+const categories = [{
+  tag: 'fault',
+  name: 'Issues'
+}, {
+  tag: 'data',
+  name: 'Data Type'
+}, {
+  tag: 'form',
+  name: 'Chart Type'
+}, {
+  tag: 'media',
+  name: 'Media'
+}, {
+  tag: 'layout',
+  name: 'Layout'
+}, {
+  tag: 'metaphor',
+  name: 'Metaphor'
+}]
+
 const CaptionGrid = props => {
   const { image, ...rootProps } = props
   const classes = useStyles()
+
+  const labelsByCategory = groupBy(image.labels, l => l.split(':')[0])
 
   return (
     <Grid {...rootProps} className={clsx(rootProps.className, classes.root)}>
@@ -44,7 +67,7 @@ const CaptionGrid = props => {
               Source:
             </Typography>
             <Chip
-              label={image.source_platform}
+              label={`${image.source_platform}/${image.source}`}
               component='a'
               href={image.source_url}
               clickable
@@ -52,7 +75,7 @@ const CaptionGrid = props => {
               target='_blank'
             />
             <Chip
-              label={`${image.source}/comments/${image.id}`}
+              label={truncate(image.title)}
               component='a'
               href={image.url}
               clickable
@@ -60,44 +83,16 @@ const CaptionGrid = props => {
               target='_blank'
             />
           </Grid>
-          <Grid className={classes.chips} item>
-            <Typography>
-              Data Type:
-            </Typography>
-            <Chip
-              label='Categorical'
-            />
-            <Chip
-              label='Quantitative'
-            />
-          </Grid>
-          <Grid className={classes.chips} item>
-            <Typography>
-              Chart Type:
-            </Typography>
-            <Chip
-              label='Bar Chart'
-            />
-          </Grid>
-          <Grid className={classes.chips} item>
-            <Typography>
-              Other:
-            </Typography>
-            <Chip
-              label='Metaphor'
-            />
-          </Grid>
-          <Grid className={classes.chips} item>
-            <Typography>
-              Issues:
-            </Typography>
-            <Chip
-              label='Truncated Axis'
-            />
-            <Chip
-              label='Misleading Area Encoding'
-            />
-          </Grid>
+          {categories.map(({ tag, name }) => (
+            !labelsByCategory[tag] ? undefined : (
+              <Grid className={classes.chips} item>
+                <Typography>{name}</Typography>
+                {labelsByCategory[tag].map(label => (
+                  <Chip key={label} label={label.substr(tag.length + 1)} />
+                ))}
+              </Grid>
+            )
+          ))}
         </Grid>
       </Paper>
     </Grid>
