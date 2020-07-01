@@ -1,5 +1,5 @@
 import Slider from '@material-ui/core/Slider'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, withStyles } from '@material-ui/core/styles'
 import Tooltip from '@material-ui/core/Tooltip'
 import * as dayjs from 'dayjs'
 import PropTypes from 'prop-types'
@@ -7,18 +7,49 @@ import React from 'react'
 
 const useStyles = makeStyles(theme => ({
   slider: {
+    margin: '10px 20px 10px 20px',
     width: '95%'
   }
 }))
+
+const PrettoSlider = withStyles({
+  root: {
+    color: '#52af77',
+    height: 8
+  },
+  thumb: {
+    height: 24,
+    width: 24,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    marginTop: -8,
+    marginLeft: -12,
+    '&:focus, &:hover, &$active': {
+      boxShadow: 'inherit'
+    }
+  },
+  active: {},
+  valueLabel: {
+    left: 'calc(-50% + 4px)'
+  },
+  track: {
+    height: 8,
+    borderRadius: 4
+  },
+  rail: {
+    height: 8,
+    borderRadius: 4
+  }
+})(Slider)
 
 const DateRangeSlider = props => {
   const { dateRange, onChange } = props
   const classes = useStyles()
 
-  const [dateRangeValue, setDateRangeValue] = React.useState([
-    0,
-    dayjs(dateRange[1]).diff(dateRange[0], 'month')
-  ])
+  const minValue = 0
+  const maxValue = dayjs(dateRange[1]).diff(dateRange[0], 'month')
+
+  const [dateRangeValue, setDateRangeValue] = React.useState([minValue, maxValue])
 
   const handleDateRangeChange = (event, newDateRangeValue) => {
     setDateRangeValue(newDateRangeValue)
@@ -28,27 +59,34 @@ const DateRangeSlider = props => {
     ])
   }
 
-  function dateRangeValueText (value) {
-    return dayjs(dateRange[0]).add(value, 'month').format('YYYY-MM')
+  const dateRangeValueText = (value) => {
+    return dayjs(dateRange[0]).add(value, 'month').format('YYYY-MMM')
   }
 
-  function ValueLabelComponent (props) {
+  const ValueLabelComponent = (props) => {
     const { children, open, value } = props
 
+    let placement = 'bottom'
+    if (value === dateRangeValue[1]) {
+    // if (value === dateRangeValue[1] && (dateRangeValue[1] - dateRangeValue[0]) / (maxValue - minValue) < 0.4) {
+      placement = 'top'
+    }
+
     return (
-      <Tooltip open={open} enterTouchDelay={0} placement='top' title={dateRangeValueText(value)}>
+      <Tooltip open={open} arrow placement={placement} title={dateRangeValueText(value)}>
         {children}
       </Tooltip>
     )
   }
 
   return (
-    <Slider
+    <PrettoSlider
       value={dateRangeValue}
+      min={minValue}
+      max={maxValue}
       onChange={handleDateRangeChange}
-      valueLabelDisplay='auto'
+      valueLabelDisplay='on'
       ValueLabelComponent={ValueLabelComponent}
-      // valueLabelFormat={dateRangeValueText}
       aria-labelledby='range-slider'
       getAriaValueText={dateRangeValueText}
       className={classes.slider}

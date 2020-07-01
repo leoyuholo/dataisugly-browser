@@ -62,12 +62,7 @@ const FilterMenu = props => {
       <div className={classes.drawerContainer}>
         <List>
           <ListItem>
-            <Typography>Filter</Typography>
-          </ListItem>
-          <ListItem>
-            <Typography gutterBottom>
-              Date
-            </Typography>
+            <Typography variant='h6'>Filter</Typography>
           </ListItem>
           <ListItem>
             <DateRangeSlider dateRange={config.imageLists.dateRange} onChange={handleDateRangeChange} />
