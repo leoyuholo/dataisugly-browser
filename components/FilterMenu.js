@@ -44,18 +44,19 @@ const FilterMenu = props => {
   const { isWide, open, labelOptions, onClose, onFilter, drawerProps } = props
   const classes = useStyles()
 
-  let filter = {
+  const [filter, setFilter] = React.useState({
     startDate: config.imageLists.dateRange[0],
     endDate: config.imageLists.dateRange[1],
     tags: fromPairs(labelOptions.map(category => [
       category.tag,
       fromPairs(category.options.map(tag => [tag, false]))
     ]))
-  }
+  })
 
-  const updateFilter = (newFilter) => {
-    filter = { ...filter, ...newFilter }
-    onFilter(filter)
+  const updateFilter = (update) => {
+    const newFilter = { ...filter, ...update }
+    setFilter(newFilter)
+    onFilter(newFilter)
   }
 
   const handleDateRangeChange = (newDateRange) => {
