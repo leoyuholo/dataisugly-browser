@@ -63,7 +63,7 @@ const Transition = React.forwardRef(function Transition (props, ref) {
 })
 
 const ImageDetail = props => {
-  const { image, handleClose } = props
+  const { image, labelOptions, handleClose } = props
   const classes = useStyles()
 
   if (!props.open) { return null }
@@ -89,7 +89,7 @@ const ImageDetail = props => {
           </AppBar>
           <Grid className={classes.imageDetail} container>
             <ImageGrid className={classes.imageGrid} item sm={12} md={8} onClick={handleClose} src={`/${image.image_path}`} />
-            <CaptionGrid className={classes.captionGrid} item sm={12} md={4} image={image} />
+            <CaptionGrid className={classes.captionGrid} item sm={12} md={4} image={image} labelOptions={labelOptions} />
           </Grid>
         </div>
       </Dialog>
@@ -99,6 +99,7 @@ const ImageDetail = props => {
 
 ImageDetail.propTypes = {
   image: PropTypes.object,
+  labelOptions: PropTypes.array,
   open: PropTypes.bool,
   handleClose: PropTypes.func
 }

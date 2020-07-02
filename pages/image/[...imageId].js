@@ -8,7 +8,7 @@ import Loading from '../../components/Loading'
 import config from '../../src/config'
 
 const Image = props => {
-  const { image, labels = [] } = props
+  const { image, labelOptions } = props
   const router = nextUseRouter()
 
   const handleClose = () => {
@@ -20,20 +20,28 @@ const Image = props => {
       <Head>
         <title>Bad Vis Browser</title>
       </Head>
-      <ImageDetail open image={image} labels={labels} handleClose={handleClose} />
+      <ImageDetail open image={image} labelOptions={labelOptions} handleClose={handleClose} />
     </div>
   )
 }
 
 Image.propTypes = {
   image: PropTypes.object.isRequired,
-  labels: PropTypes.object
+  labelOptions: PropTypes.array
 }
 
 Image.getInitialProps = async ctx => {
-  const res = await fetch(`${config.imageMeta.baseUrl}/${ctx.query.imageId.slice(-1)[0]}.json`)
-  const json = await res.json()
-  return { image: json }
+  try {
+    const [image, labelOptions] = await Promise.all([
+      fetch(`${config.imageMeta.baseUrl}/${ctx.query.imageId.slice(-1)[0]}.json`).then(r => r.json()),
+      fetch(config.labelOptions.url).then(r => r.json())
+    ])
+
+    return { image, labelOptions }
+  } catch (error) {
+    console.log('getInitialProps error: ', error)
+    return { error }
+  }
 }
 
 export default Image

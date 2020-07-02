@@ -6,15 +6,16 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 const useStyles = makeStyles(theme => ({
-  slider: {
-    margin: '10px 20px 10px 20px',
-    width: '95%'
-  }
+  slider: props => ({
+    margin: '10px 20px 20px 20px',
+    width: `${props.width - 100}px`
+  })
 }))
 
-const PrettoSlider = withStyles({
+const PrettoSlider = withStyles(theme => ({
   root: {
-    color: '#52af77',
+    color: theme.palette.primary.main,
+    // color: '#52af77',
     height: 8
   },
   thumb: {
@@ -40,11 +41,54 @@ const PrettoSlider = withStyles({
     height: 8,
     borderRadius: 4
   }
-})(Slider)
+}))(Slider)
+
+const dateRangeValueText = (dateRange, value) => {
+  return dayjs(dateRange[0]).add(value, 'month').format('YYYY-MMM')
+}
+
+const DateRangeTooltip = (props) => {
+  const { children, open, value } = props
+
+  const { dateRange, dateRangeValue, newValue } = value
+  // const { dateRange, dateRangeValue, maxValue, minValue, newValue } = value
+
+  let placement = 'bottom'
+  if (newValue === dateRangeValue[1]) {
+  // if (newValue === dateRangeValue[1] && (dateRangeValue[1] - dateRangeValue[0]) / (maxValue - minValue) < 0.4) {
+    placement = 'top'
+  }
+
+  return (
+    <Tooltip
+      open={open}
+      arrow
+      placement={placement}
+      title={dateRangeValueText(dateRange, newValue)}
+      PopperProps={{
+        disablePortal: true,
+        modifiers: {
+          preventOverflow: {
+            boundariesElement: 'scrollParent',
+            escapeWithReference: true
+          }
+        }
+      }}
+    >
+      {children}
+    </Tooltip>
+  )
+}
+
+DateRangeTooltip.propTypes = {
+  children: PropTypes.element.isRequired,
+  open: PropTypes.bool.isRequired,
+  value: PropTypes.object.isRequired
+}
 
 const DateRangeSlider = props => {
   const { dateRange, onChange } = props
-  const classes = useStyles()
+  const classes = useStyles(props)
 
   const minValue = 0
   const maxValue = dayjs(dateRange[1]).diff(dateRange[0], 'month')
@@ -63,20 +107,9 @@ const DateRangeSlider = props => {
     return dayjs(dateRange[0]).add(value, 'month').format('YYYY-MMM')
   }
 
-  const ValueLabelComponent = (props) => {
-    const { children, open, value } = props
-
-    let placement = 'bottom'
-    if (value === dateRangeValue[1]) {
-    // if (value === dateRangeValue[1] && (dateRangeValue[1] - dateRangeValue[0]) / (maxValue - minValue) < 0.4) {
-      placement = 'top'
-    }
-
-    return (
-      <Tooltip open={open} arrow placement={placement} title={dateRangeValueText(value)}>
-        {children}
-      </Tooltip>
-    )
+  // workaround for the flickering tooltips
+  const localVarPasser = (value) => {
+    return { dateRange, dateRangeValue, maxValue, minValue, newValue: value }
   }
 
   return (
@@ -86,7 +119,8 @@ const DateRangeSlider = props => {
       max={maxValue}
       onChange={handleDateRangeChange}
       valueLabelDisplay='on'
-      ValueLabelComponent={ValueLabelComponent}
+      ValueLabelComponent={DateRangeTooltip}
+      valueLabelFormat={localVarPasser}
       aria-labelledby='range-slider'
       getAriaValueText={dateRangeValueText}
       className={classes.slider}

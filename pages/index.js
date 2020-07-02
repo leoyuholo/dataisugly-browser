@@ -2,6 +2,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
 import fetch from 'isomorphic-unfetch'
+import { debounce } from 'lodash'
 import Head from 'next/head'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
@@ -67,7 +68,7 @@ const Index = props => {
     }
   }
 
-  const handleImageFilter = (newFilter) => {
+  const handleImageFilter = debounce((newFilter) => {
     const newFilteredImageList = filterImageList(imageList, newFilter)
 
     if (nextUrl && nextUrl !== config.imageLists.all.url && (newFilteredImageList.length / imageList.length) < 0.2) {
@@ -75,7 +76,7 @@ const Index = props => {
     }
     setImageListFilter(newFilter)
     setFilteredImageList(newFilteredImageList)
-  }
+  }, 1000)
 
   const [menuState, setMenuState] = React.useState(false)
   const toggleMenu = (state) => (event) => {
@@ -97,7 +98,7 @@ const Index = props => {
         <FilterMenu isWide={isWide} open={menuState} labelOptions={labelOptions} onClose={toggleMenu(false)} onFilter={handleImageFilter} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Gallery imageList={filteredImageList} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} />
+          <Gallery imageList={filteredImageList} labelOptions={labelOptions} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} />
         </main>
       </div>
     </ThemeProvider>
@@ -109,7 +110,7 @@ Index.propTypes = {
     images: PropTypes.array,
     next: PropTypes.string
   }),
-  labels: PropTypes.object
+  labelOptions: PropTypes.array
 }
 
 Index.getInitialProps = async ctx => {

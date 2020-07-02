@@ -32,28 +32,28 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const categories = [{
-  tag: 'fault',
-  name: 'Issues'
-}, {
-  tag: 'data',
-  name: 'Data Type'
-}, {
-  tag: 'form',
-  name: 'Chart Type'
-}, {
-  tag: 'media',
-  name: 'Media'
-}, {
-  tag: 'layout',
-  name: 'Layout'
-}, {
-  tag: 'metaphor',
-  name: 'Metaphor'
-}]
+// const categories = [{
+//   tag: 'fault',
+//   name: 'Issues'
+// }, {
+//   tag: 'data',
+//   name: 'Data Type'
+// }, {
+//   tag: 'form',
+//   name: 'Chart Type'
+// }, {
+//   tag: 'media',
+//   name: 'Media'
+// }, {
+//   tag: 'layout',
+//   name: 'Layout'
+// }, {
+//   tag: 'metaphor',
+//   name: 'Metaphor'
+// }]
 
 const CaptionGrid = props => {
-  const { image, ...rootProps } = props
+  const { image, labelOptions, ...rootProps } = props
   const classes = useStyles()
 
   const labelsByCategory = groupBy(image.labels, l => l.split(':')[0])
@@ -83,9 +83,9 @@ const CaptionGrid = props => {
               target='_blank'
             />
           </Grid>
-          {categories.map(({ tag, name }) => (
+          {labelOptions.map(({ tag, name }) => (
             !labelsByCategory[tag] ? undefined : (
-              <Grid className={classes.chips} item>
+              <Grid key={tag} className={classes.chips} item>
                 <Typography>{name}</Typography>
                 {labelsByCategory[tag].map(label => (
                   <Chip key={label} label={label.substr(tag.length + 1)} />
@@ -93,6 +93,12 @@ const CaptionGrid = props => {
               </Grid>
             )
           ))}
+          {!image.remarks ? undefined : (
+            <Grid>
+              <Typography>Remarks</Typography>
+              <Typography>{image.remarks}</Typography>
+            </Grid>
+          )}
         </Grid>
       </Paper>
     </Grid>
@@ -100,7 +106,8 @@ const CaptionGrid = props => {
 }
 
 CaptionGrid.propTypes = {
-  image: PropTypes.object.isRequired
+  image: PropTypes.object.isRequired,
+  labelOptions: PropTypes.array
 }
 
 export default CaptionGrid
