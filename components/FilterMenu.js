@@ -1,11 +1,13 @@
 import Collapse from '@material-ui/core/Collapse'
 import Drawer from '@material-ui/core/Drawer'
+import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
+import CloseIcon from '@material-ui/icons/Close'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import { fromPairs, mapValues } from 'lodash'
@@ -106,7 +108,12 @@ const FilterMenu = props => {
       <div className={classes.drawerContainer}>
         <List>
           <ListItem>
-            <Typography variant='h6'>Filter</Typography>
+            <ListItemText variant='h6'>Filter</ListItemText>
+            {!isWide && <ListItemSecondaryAction>
+              <IconButton edge="end" aria-label="close" onClick={onClose}>
+                <CloseIcon />
+              </IconButton>
+            </ListItemSecondaryAction>}
           </ListItem>
           <ListItem>
             <DateRangeSlider width={drawerWidth} dateRange={config.imageLists.dateRange} onChange={handleDateRangeChange} />
