@@ -30,18 +30,27 @@ Image.propTypes = {
   labelOptions: PropTypes.array
 }
 
-Image.getInitialProps = async ctx => {
+export default Image
+
+export const getStaticProps = async ({ params }) => {
   try {
     const [image, labelOptions] = await Promise.all([
-      fetch(`${config.imageMeta.baseUrl}/${ctx.query.imageId.slice(-1)[0]}.json`).then(r => r.json()),
+      fetch(`${config.imageMeta.baseUrl}/${params.imageId}.json`).then(r => r.json()),
       fetch(config.labelOptions.url).then(r => r.json())
     ])
 
-    return { image, labelOptions }
+    return { props: { image, labelOptions } }
   } catch (error) {
-    console.log('getInitialProps error: ', error)
-    return { error }
+    console.log('getStaticProps error: ', error)
+    return { props: { error: error.message } }
   }
 }
 
-export default Image
+export const getStaticPaths = async () => {
+  return {
+    paths: [
+      { params: { imageId: '1yb04c_0' } }
+    ],
+    fallback: true,
+  }
+}

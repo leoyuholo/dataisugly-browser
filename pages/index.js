@@ -113,18 +113,18 @@ Index.propTypes = {
   labelOptions: PropTypes.array
 }
 
-Index.getInitialProps = async ctx => {
+export default withWidth()(Index)
+
+export const getStaticProps = async () => {
   try {
     const [imageList, labelOptions] = await Promise.all([
       fetch(config.imageLists.page[0].url).then(r => r.json()),
       fetch(config.labelOptions.url).then(r => r.json())
     ])
 
-    return { imageList, labelOptions }
+    return { props: { imageList, labelOptions } }
   } catch (error) {
-    console.log('getInitialProps error: ', error)
-    return { error }
+    console.log('getStaticProps error: ', error)
+    return { props: { error: error.message } }
   }
 }
-
-export default withWidth()(Index)
