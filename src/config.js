@@ -1,8 +1,8 @@
 const config = {}
 
 config.isServer = typeof window === 'undefined'
-config.rootPath = ''
 config.development = !!process.env.NEXT_PUBLIC_DEV
+config.rootPath = !config.development ? '/bad-vis-browser' : ''
 config.urlPrefix = !config.development ?
   'https://leoyuholo.github.io' :
   config.isServer ?
