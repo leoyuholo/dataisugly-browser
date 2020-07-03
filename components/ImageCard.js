@@ -23,7 +23,7 @@ const ImageCard = props => {
           component='img'
           width={config.thumbnails.size.width}
           height={config.thumbnails.size.height}
-          image={image.thumbnail_path}
+          image={`${config.images.thumbnails.url}/${image.thumbnail_path}`}
         />
       </CardActionArea>
     </Card>

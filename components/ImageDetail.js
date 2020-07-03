@@ -8,6 +8,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
 import PropTypes from 'prop-types'
 import React from 'react'
+import config from '../src/config'
 import { darkTheme } from '../src/theme'
 import CaptionGrid from './LightBox/CaptionGrid'
 import ImageGrid from './LightBox/ImageGrid'
@@ -88,7 +89,7 @@ const ImageDetail = props => {
             </Toolbar>
           </AppBar>
           <Grid className={classes.imageDetail} container>
-            <ImageGrid className={classes.imageGrid} item sm={12} md={8} onClick={handleClose} src={`/${image.image_path}`} />
+            <ImageGrid className={classes.imageGrid} item sm={12} md={8} onClick={handleClose} src={`${config.images.preview.url}/${image.image_path}`} />
             <CaptionGrid className={classes.captionGrid} item sm={12} md={4} image={image} labelOptions={labelOptions} />
           </Grid>
         </div>

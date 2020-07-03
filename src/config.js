@@ -12,6 +12,17 @@ config.thumbnails = {
   }
 }
 
+config.images = {}
+config.images.root = {
+  url: `${config.urlPrefix}`
+}
+config.images.preview = {
+  url: config.images.root.url
+}
+config.images.thumbnails = {
+  url: config.images.root.url
+}
+
 config.imageLists = {}
 config.imageLists.root = {
   url: `${config.urlPrefix}/bad-vis-images`
