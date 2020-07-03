@@ -2,7 +2,7 @@ const config = {}
 
 config.isServer = typeof window === 'undefined'
 config.rootPath = ''
-config.urlPrefix = config.isServer ? 'http://localhost:3000' : 'https://leoyuholo.github.io'
+config.urlPrefix = 'https://leoyuholo.github.io'
 // config.urlPrefix = config.isServer ? 'http://localhost:3000' : `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
 
 config.thumbnails = {
