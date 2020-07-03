@@ -33,7 +33,7 @@ const Gallery = props => {
   const [imageIdx, setImageIdx] = useState(-1)
   const handleClickOpen = (index) => (event) => {
     const image = imageList[index]
-    const href = `${config.rootPath}/image/${image.image_name}`
+    const href = `${config.rootPath}/?image=${image.image_name}`
     window.history.pushState(null, '', href)
     setImageIdx(index)
     setOpen(true)
