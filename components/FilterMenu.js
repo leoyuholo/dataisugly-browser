@@ -116,7 +116,7 @@ const FilterMenu = props => {
             </ListItemSecondaryAction>}
           </ListItem>
           <ListItem>
-            <DateRangeSlider width={drawerWidth} dateRange={config.imageLists.dateRange} onChange={handleDateRangeChange} />
+            <DateRangeSlider width={drawerWidth} dates={[filter.startDate, filter.endDate]} dateRange={config.imageLists.dateRange} onChange={handleDateRangeChange} />
           </ListItem>
           {tagCnt <= 0 ? undefined : (
             <div>

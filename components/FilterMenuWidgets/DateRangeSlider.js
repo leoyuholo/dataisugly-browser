@@ -87,13 +87,16 @@ DateRangeTooltip.propTypes = {
 }
 
 const DateRangeSlider = props => {
-  const { dateRange, onChange } = props
+  const { dates, dateRange, onChange } = props
   const classes = useStyles(props)
 
   const minValue = 0
   const maxValue = dayjs(dateRange[1]).diff(dateRange[0], 'month')
 
-  const [dateRangeValue, setDateRangeValue] = React.useState([minValue, maxValue])
+  const [dateRangeValue, setDateRangeValue] = React.useState([
+    dayjs(dates[0]).diff(dateRange[0], 'month'),
+    dayjs(dates[1]).diff(dateRange[0], 'month')
+  ])
 
   const handleDateRangeChange = (event, newDateRangeValue) => {
     setDateRangeValue(newDateRangeValue)
@@ -129,6 +132,7 @@ const DateRangeSlider = props => {
 }
 
 DateRangeSlider.propTypes = {
+  dates: PropTypes.array,
   dateRange: PropTypes.array,
   onChange: PropTypes.func
 }
