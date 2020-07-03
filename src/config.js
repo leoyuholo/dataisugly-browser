@@ -3,11 +3,12 @@ const config = {}
 config.isServer = typeof window === 'undefined'
 config.development = !!process.env.NEXT_PUBLIC_DEV
 config.rootPath = !config.development ? '/bad-vis-browser' : ''
-config.urlPrefix = !config.development ?
-  'https://leoyuholo.github.io' :
-  config.isServer ?
-    'http://localhost:3000' :
-    `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
+config.urlPrefix = !config.isServer ? '' : config.development ? 'http://localhost:3000' : 'https://leoyuholo.github.io'
+// config.urlPrefix = !config.development ?
+//   'https://leoyuholo.github.io' :
+//   config.isServer ?
+//     'http://localhost:3000' :
+//     `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
 
 config.thumbnails = {
   size: {
