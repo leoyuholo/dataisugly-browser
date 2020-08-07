@@ -7,7 +7,7 @@ import React from 'react'
 
 const useStyles = makeStyles(theme => ({
   slider: props => ({
-    margin: '10px 20px 20px 20px',
+    margin: '10px 20px 25px 20px',
     width: `${props.width - 100}px`
   })
 }))

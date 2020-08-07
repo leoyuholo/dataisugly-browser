@@ -9,6 +9,7 @@ config.urlPrefix = !config.isServer ? '' : config.development ? 'http://localhos
 //   config.isServer ?
 //     'http://localhost:3000' :
 //     `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
+config.urlPrefix += '/bad-vis-images'
 
 config.thumbnails = {
   size: {
@@ -19,7 +20,7 @@ config.thumbnails = {
 
 config.images = {}
 config.images.root = {
-  url: `${config.urlPrefix}`
+  url: config.urlPrefix
 }
 config.images.preview = {
   url: config.images.root.url
@@ -30,13 +31,13 @@ config.images.thumbnails = {
 
 config.imageLists = {}
 config.imageLists.root = {
-  url: `${config.urlPrefix}/bad-vis-images`
+  url: `${config.urlPrefix}/image_lists`
 }
 config.imageLists.page = [{
-  url: `${config.imageLists.root.url}/image_lists/0.json`
+  url: `${config.imageLists.root.url}/0.json`
 }]
 config.imageLists.all = {
-  url: `${config.imageLists.root.url}/image_lists/all.json`
+  url: `${config.imageLists.root.url}/all.json`
 }
 config.imageLists.dateRange = [
   new Date('2012-11-01T00:00:00Z'),
@@ -44,11 +45,11 @@ config.imageLists.dateRange = [
 ]
 
 config.imageMeta = {
-  baseUrl: `${config.urlPrefix}/bad-vis-images/meta`
+  baseUrl: `${config.urlPrefix}/meta`
 }
 
 config.labelOptions = {
-  url: `${config.urlPrefix}/bad-vis-images/image_lists/labelOptions.json`
+  url: `${config.imageLists.root.url}/labelOptions.json`
 }
 
 export default config

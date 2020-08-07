@@ -15,6 +15,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import config from '../src/config'
 import DateRangeSlider from './FilterMenuWidgets/DateRangeSlider'
+import GroupedTagTray from './FilterMenuWidgets/GroupedTagTray'
 import SelectedTagTray from './FilterMenuWidgets/SelectedTagTray'
 import TagTray from './FilterMenuWidgets/TagTray'
 
@@ -133,7 +134,10 @@ const FilterMenu = props => {
                 {openState[category.tag] ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
               <Collapse in={openState[category.tag]} timeout='auto' unmountOnExit>
-                <TagTray tags={category.options} tagState={tagState[category.tag]} onClick={handleTagClick(category)} />
+                {(category.subcategories ?
+                  <GroupedTagTray tags={category.options} subcategories={category.subcategories} tagState={tagState[category.tag]} onClick={handleTagClick(category)} /> :
+                  <TagTray tags={category.options} tagState={tagState[category.tag]} onClick={handleTagClick(category)} />
+                )}
               </Collapse>
             </div>
           ))}
@@ -146,7 +150,14 @@ const FilterMenu = props => {
 FilterMenu.propTypes = {
   isWide: PropTypes.bool,
   open: PropTypes.bool,
-  labelOptions: PropTypes.array,
+  labelOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      tag: PropTypes.string,
+      name: PropTypes.string,
+      subcategories: PropTypes.array,
+      options: PropTypes.array
+    })
+  ),
   onClose: PropTypes.func,
   onFilter: PropTypes.func,
   drawerProps: PropTypes.object
