@@ -1,6 +1,7 @@
 import Chip from '@material-ui/core/Chip'
 import { makeStyles } from '@material-ui/core/styles'
-import { compact, flatMap } from 'lodash'
+import compact from 'lodash/compact'
+import map from 'lodash/map'
 import { PropTypes } from 'prop-types'
 import React from 'react'
 
@@ -16,25 +17,25 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const SelectedTagTray = (props) => {
-  const { tagState, onDelete } = props
+  const { tagsState, labelTags, onDelete } = props
   const classes = useStyles()
 
-  const selectedTags = compact(flatMap(tagState, (tags, category) => flatMap(tags, (value, tag) => value && { category, tag })))
+  const selectedTags = compact(map(tagsState, (value, tag) => value && tag))
 
   const handleDelete = (tag) => (event) => {
-    onDelete(tag.category, tag.tag)
+    onDelete(tag)
   }
 
   return (
     <div className={classes.root}>
       {selectedTags.map(tag => (
         <Chip
-          key={`${tag.category}:${tag.tag}`}
-          // color={tagState[tag] ? 'primary' : undefined}
-          // variant={tagState[tag] ? undefined : 'outlined'}
+          key={tag}
+          // color={tagsState[tag] ? 'primary' : undefined}
+          // variant={tagsState[tag] ? undefined : 'outlined'}
           size='small'
-          label={tag.tag}
-          onDelete={handleDelete(tag)}
+          label={labelTags.tags[tag].name}
+          onDelete={handleDelete(labelTags.tags[tag])}
         />
       ))}
     </div>
@@ -42,7 +43,12 @@ const SelectedTagTray = (props) => {
 }
 
 SelectedTagTray.propTypes = {
-  tagState: PropTypes.object,
+  tagsState: PropTypes.objectOf(PropTypes.bool).isRequired,
+  labelTags: PropTypes.shape({
+    tags: PropTypes.objectOf(PropTypes.shape({
+      name: PropTypes.string
+    }))
+  }).isRequired,
   onDelete: PropTypes.func
 }
 

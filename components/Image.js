@@ -9,7 +9,7 @@ import ImageDetail from './ImageDetail'
 import Loading from './Loading'
 
 const Image = props => {
-  const { imageId, labelOptions } = props
+  const { imageId, labelTags } = props
   const image = props.image || useSWR(`${config.imageMeta.baseUrl}/${imageId}.json`, fetcher).data
   const router = useRouter()
 
@@ -22,7 +22,7 @@ const Image = props => {
       <Head>
         <title>Bad Vis Browser</title>
       </Head>
-      <ImageDetail open image={image} labelOptions={labelOptions} handleClose={handleClose} />
+      <ImageDetail open image={image} labelTags={labelTags} handleClose={handleClose} />
     </div>
   )
 }
@@ -30,7 +30,7 @@ const Image = props => {
 Image.propTypes = {
   imageId: PropTypes.string.isRequired,
   image: PropTypes.object,
-  labelOptions: PropTypes.array.isRequired
+  labelTags: PropTypes.object.isRequired
 }
 
 export default Image

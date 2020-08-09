@@ -23,6 +23,7 @@ RUN if [ "$USER_GID" != "1000" ] || [ "$USER_UID" != "1000" ]; then \
   && echo $SNIPPET >> /home/$USERNAME/.zshrc \
   && chown $USERNAME /home/$USERNAME/.bashrc /home/$USERNAME/.zshrc \
   && mkdir -p /home/$USERNAME/.vscode-server/extensions \
+  && mkdir -p /home/$USERNAME/.vscode-server/extensionsCache \
   && chown -R $USERNAME /home/$USERNAME/.vscode-server
 
 ENV DEBIAN_FRONTEND=noninteractive

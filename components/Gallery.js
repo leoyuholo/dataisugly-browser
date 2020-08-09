@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Gallery = props => {
-  const { imageList, labelOptions, hasMoreImages = false, isFetching = false, handleFetchMore = () => {} } = props
+  const { imageList, labelTags, hasMoreImages = false, isFetching = false, handleFetchMore = () => {} } = props
   const classes = useStyles()
   const imagesLimit = 1000
 
@@ -86,7 +86,7 @@ const Gallery = props => {
               </Grid>
           )
         }
-        <ImageDetail open={open} labelOptions={labelOptions} image={imageList[imageIdx]} handleClose={handleClose} />
+        <ImageDetail open={open} labelTags={labelTags} image={imageList[imageIdx]} handleClose={handleClose} />
       </Grid>
     </Grid>
   )
@@ -94,7 +94,7 @@ const Gallery = props => {
 
 Gallery.propTypes = {
   imageList: PropTypes.array.isRequired,
-  labelOptions: PropTypes.array,
+  labelTags: PropTypes.object,
   hasMoreImages: PropTypes.bool,
   isFetching: PropTypes.bool,
   handleFetchMore: PropTypes.func

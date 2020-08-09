@@ -5,12 +5,16 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
+import Popover from '@material-ui/core/Popover'
 import { makeStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
 import CloseIcon from '@material-ui/icons/Close'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
-import { fromPairs, mapValues } from 'lodash'
+import fromPairs from 'lodash/fromPairs'
+import map from 'lodash/map'
+import mapValues from 'lodash/mapValues'
 import PropTypes from 'prop-types'
 import React from 'react'
 import config from '../src/config'
@@ -40,20 +44,23 @@ const useStyles = makeStyles(theme => ({
   drawerContainer: {
     overflowX: 'hidden',
     overflowY: 'visible'
+  },
+  popover: {
+    pointerEvents: 'none'
+  },
+  popoverPaper: {
+    padding: theme.spacing(1)
   }
 }))
 
 const FilterMenu = props => {
-  const { isWide, open, labelOptions, onClose, onFilter, drawerProps } = props
+  const { isWide, open, labelTags, onClose, onFilter, drawerProps } = props
   const classes = useStyles()
 
   const [filter, setFilter] = React.useState({
     startDate: config.imageLists.dateRange[0],
     endDate: config.imageLists.dateRange[1],
-    tags: fromPairs(labelOptions.map(category => [
-      category.tag,
-      fromPairs(category.options.map(tag => [tag, false]))
-    ]))
+    tags: fromPairs(map(labelTags.tags, tag => [tag.tag, false]))
   })
 
   const updateFilter = (update) => {
@@ -69,31 +76,45 @@ const FilterMenu = props => {
   }
 
   const [openState, setOpenState] = React.useState(
-    fromPairs(labelOptions.map((category, i) => [category.tag, i === 0])))
+    fromPairs(labelTags.categories.map((category, i) => [category.category, i === 0])))
   const handleListClick = (category) => (event) => {
-    const newState = !openState[category.tag]
-    const newOpenState = { ...mapValues(openState, state => false), [category.tag]: newState }
+    const newState = !openState[category.category]
+    const newOpenState = { ...mapValues(openState, state => false), [category.category]: newState }
     setOpenState(newOpenState)
   }
 
-  const [tagCnt, setTagCnt] = React.useState(0)
-  const [tagState, setTagState] = React.useState(filter.tags)
-  const handleTagClick = (category) => (tag) => {
-    const newValue = !tagState[category.tag][tag]
-    const newTagState = { ...tagState, [category.tag]: { ...tagState[category.tag], [tag]: newValue } }
+  const [tagsCnt, setTagsCnt] = React.useState(0)
+  const [tagsState, setTagsState] = React.useState(filter.tags)
+  const handleTagClick = (tag) => {
+    const newValue = !tagsState[tag.tag]
+    const newTagsState = { ...tagsState, [tag.tag]: newValue }
 
-    setTagState(newTagState)
-    setTagCnt(tagCnt + (newValue ? 1 : -1))
-    updateFilter({ tags: newTagState })
+    setTagsState(newTagsState)
+    setTagsCnt(tagsCnt + (newValue ? 1 : -1))
+    updateFilter({ tags: newTagsState })
   }
 
-  const handleTagDelete = (category, tag) => {
-    const newTagState = { ...tagState, [category]: { ...tagState[category], [tag]: false } }
+  const handleTagDelete = (tag) => {
+    const newTagsState = { ...tagsState, [tag.tag]: false }
 
-    setTagState(newTagState)
-    setTagCnt(tagCnt - 1)
-    updateFilter({ tags: newTagState })
+    setTagsState(newTagsState)
+    setTagsCnt(tagsCnt - 1)
+    updateFilter({ tags: newTagsState })
   }
+
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [popoverContent, setPopoverContent] = React.useState('')
+  const handlePopoverOpen = (event, tag) => {
+    setAnchorEl(event.currentTarget)
+    setPopoverContent(tag.description || 'No description for ' + tag.name)
+  }
+
+  const handlePopoverClose = (event, tag) => {
+    setAnchorEl(null)
+    setPopoverContent('')
+  }
+
+  const popoverOpen = Boolean(anchorEl)
 
   return (
     <Drawer
@@ -110,38 +131,63 @@ const FilterMenu = props => {
         <List>
           <ListItem>
             <ListItemText variant='h6'>Filter</ListItemText>
-            {!isWide && <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="close" onClick={onClose}>
-                <CloseIcon />
-              </IconButton>
-            </ListItemSecondaryAction>}
+            {!isWide &&
+              <ListItemSecondaryAction>
+                <IconButton edge='end' aria-label='close' onClick={onClose}>
+                  <CloseIcon />
+                </IconButton>
+              </ListItemSecondaryAction>}
           </ListItem>
           <ListItem>
             <DateRangeSlider width={drawerWidth} dates={[filter.startDate, filter.endDate]} dateRange={config.imageLists.dateRange} onChange={handleDateRangeChange} />
           </ListItem>
-          {tagCnt <= 0 ? undefined : (
+          {tagsCnt <= 0 ? undefined : (
             <div>
               <ListItem>
                 <ListItemText primary='Selected' />
               </ListItem>
-              <SelectedTagTray tagState={tagState} onDelete={handleTagDelete} />
+              <SelectedTagTray tagsState={tagsState} labelTags={labelTags} onDelete={handleTagDelete} />
             </div>
           )}
-          {labelOptions.map(category => (
-            <div key={category.tag}>
+          {labelTags.categories.map(category => ({ category, Tag: category.subcategories.length > 0 ? GroupedTagTray : TagTray })).map(({ category, Tag }) => (
+            <div key={category.category}>
               <ListItem button onClick={handleListClick(category)}>
                 <ListItemText primary={category.name} />
-                {openState[category.tag] ? <ExpandLess /> : <ExpandMore />}
+                {openState[category.category] ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
-              <Collapse in={openState[category.tag]} timeout='auto' unmountOnExit>
-                {(category.subcategories ?
-                  <GroupedTagTray tags={category.options} subcategories={category.subcategories} tagState={tagState[category.tag]} onClick={handleTagClick(category)} /> :
-                  <TagTray tags={category.options} tagState={tagState[category.tag]} onClick={handleTagClick(category)} />
-                )}
+              <Collapse in={openState[category.category]} timeout='auto' unmountOnExit>
+                <Tag
+                  tags={category.tags}
+                  subcategories={category.subcategories}
+                  tagsState={tagsState}
+                  onClick={handleTagClick}
+                  onTagMouseEnter={handlePopoverOpen}
+                  onTagMouseLeave={handlePopoverClose}
+                />
               </Collapse>
             </div>
           ))}
         </List>
+        <Popover
+          id='filter-menu-popover'
+          className={classes.popover}
+          classes={{ paper: classes.popoverPaper }}
+          open={popoverOpen}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left'
+          }}
+          onClose={handlePopoverClose}
+          transitionDuration={0}
+          disableRestoreFocus
+        >
+          <Typography>{popoverContent}</Typography>
+        </Popover>
       </div>
     </Drawer>
   )
@@ -150,14 +196,23 @@ const FilterMenu = props => {
 FilterMenu.propTypes = {
   isWide: PropTypes.bool,
   open: PropTypes.bool,
-  labelOptions: PropTypes.arrayOf(
-    PropTypes.shape({
-      tag: PropTypes.string,
+  labelTags: PropTypes.shape({
+    categories: PropTypes.arrayOf(PropTypes.shape({
+      category: PropTypes.string,
       name: PropTypes.string,
       subcategories: PropTypes.array,
-      options: PropTypes.array
-    })
-  ),
+      tags: PropTypes.array
+    })),
+    subcategories: PropTypes.array,
+    tags: PropTypes.objectOf(PropTypes.shape({
+      tag: PropTypes.string,
+      category: PropTypes.string,
+      subcategory: PropTypes.string,
+      name: PropTypes.string,
+      description: PropTypes.string,
+      count: PropTypes.number
+    }))
+  }),
   onClose: PropTypes.func,
   onFilter: PropTypes.func,
   drawerProps: PropTypes.object

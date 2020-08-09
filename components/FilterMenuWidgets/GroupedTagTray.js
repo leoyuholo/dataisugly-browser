@@ -1,37 +1,34 @@
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import groupBy from 'lodash/groupBy'
 import { PropTypes } from 'prop-types'
 import React from 'react'
 import TagTray from './TagTray'
 
 const useStyles = makeStyles(theme => ({
   dividerInset: {
-    margin: `0px 0 0 ${theme.spacing(1)}px`,
+    margin: `0px 0 0 ${theme.spacing(1)}px`
   }
 }))
 
 const GroupedTagTray = (props) => {
-  const { tags, subcategories } = props
+  const { subcategories } = props
   const classes = useStyles()
-
-  const tagsBySubcat = groupBy(tags, 'subcategory')
 
   return (
     <div>
       {subcategories.map(subcategory => (
-        <div key={subcategory.tag}>
+        <div key={subcategory.subcategory}>
           <li>
             <Typography
               className={classes.dividerInset}
-              color="textSecondary"
-              display="block"
-              variant="caption"
+              color='textSecondary'
+              display='block'
+              variant='caption'
             >
               {subcategory.name}
             </Typography>
           </li>
-          <TagTray {...props} tags={tagsBySubcat[subcategory.subcategory]} />
+          <TagTray {...props} tags={subcategory.tags} />
         </div>
       ))}
     </div>
@@ -39,18 +36,12 @@ const GroupedTagTray = (props) => {
 }
 
 GroupedTagTray.propTypes = {
-  tags: PropTypes.arrayOf(PropTypes.shape({
-    tag: PropTypes.string,
-    subcategory: PropTypes.string,
-    name: PropTypes.string,
-    description: PropTypes.string,
-    count: PropTypes.number,
-  })),
   subcategories: PropTypes.arrayOf(PropTypes.shape({
     category: PropTypes.string,
     subcategories: PropTypes.string,
     name: PropTypes.string,
     description: PropTypes.string,
+    tags: PropTypes.array
   }))
 }
 

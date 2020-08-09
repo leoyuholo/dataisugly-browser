@@ -16,6 +16,7 @@
     "@material-ui/icons": "^4.9.1",
     "clsx": "^1.1.1",
     "dayjs": "^1.8.28",
+    "immutability-helper": "^3.1.1",
     "isomorphic-unfetch": "^3.0.0",
     "lodash": "^4.17.15",
     "next": "^9.4.4",

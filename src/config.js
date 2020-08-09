@@ -52,4 +52,8 @@ config.labelOptions = {
   url: `${config.imageLists.root.url}/labelOptions.json`
 }
 
+config.labelTags = {
+  url: `${config.imageLists.root.url}/labelTags.json`
+}
+
 export default config

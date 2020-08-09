@@ -1,4 +1,8 @@
-import { compact, intersection, map } from 'lodash'
+import compact from 'lodash/compact'
+import groupBy from 'lodash/groupBy'
+import intersection from 'lodash/intersection'
+import map from 'lodash/map'
+import values from 'lodash/values'
 
 const keepImage = (image, filter) => {
   let result = true
@@ -15,11 +19,11 @@ const keepImage = (image, filter) => {
   return result
 }
 
-const filterImageList = (imageList, imageListFilter) => {
+const filterImageList = (imageList, imageListFilter, labelTags) => {
   const filter = {
-    tags: map(imageListFilter.tags, (tags, category) => compact(map(tags, (value, tag) => value ? `${category}:${tag}` : false))),
     startDate: +imageListFilter.startDate / 1000,
-    endDate: +imageListFilter.endDate / 1000
+    endDate: +imageListFilter.endDate / 1000,
+    tags: values(groupBy(compact(map(imageListFilter.tags, (value, tag) => value && tag)), t => labelTags.tags[t].category))
   }
   // console.log('filterImageList', filter, imageListFilter)
   return imageList.filter(image => keepImage(image, filter))
