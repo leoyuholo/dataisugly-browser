@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     // justifyContent: 'center',
     flexWrap: 'wrap',
     '& > *': {
-      margin: theme.spacing(0.5)
+      margin: theme.spacing(0.4)
     }
   }
 }))
