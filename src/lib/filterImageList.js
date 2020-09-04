@@ -1,8 +1,7 @@
-import compact from 'lodash/compact'
-import groupBy from 'lodash/groupBy'
 import intersection from 'lodash/intersection'
-import map from 'lodash/map'
-import values from 'lodash/values'
+import keys from 'lodash/keys'
+import pickBy from 'lodash/pickBy'
+import { isSubcategoryTag } from './tagHelper'
 
 const keepImage = (image, filter) => {
   let result = true
@@ -20,12 +19,24 @@ const keepImage = (image, filter) => {
 }
 
 const filterImageList = (imageList, imageListFilter, labelTags) => {
+  const tags = keys(pickBy(imageListFilter.tags))
+  const expandedTags = tags.map(t =>
+    !isSubcategoryTag(t)
+      ? [t]
+      : intersection(labelTags.all[t].tags.map(t => t.tag), tags).length === 0
+        ? labelTags.all[t].tags.map(t => t.tag)
+        : []
+  )
+
   const filter = {
     startDate: +imageListFilter.startDate / 1000,
     endDate: +imageListFilter.endDate / 1000,
-    tags: values(groupBy(compact(map(imageListFilter.tags, (value, tag) => value && tag)), t => labelTags.tags[t].category))
+    tags: expandedTags.filter(a => a.length)
+    // tags: values(groupBy(expandedTags, t => labelTags.all[t].category))
   }
-  // console.log('filterImageList', filter, imageListFilter)
+
+  // console.log('filterImageList', filter, imageListFilter, expandedTags)
+
   return imageList.filter(image => keepImage(image, filter))
 }
 

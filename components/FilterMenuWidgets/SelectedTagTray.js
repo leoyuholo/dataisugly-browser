@@ -34,8 +34,8 @@ const SelectedTagTray = (props) => {
           // color={tagsState[tag] ? 'primary' : undefined}
           // variant={tagsState[tag] ? undefined : 'outlined'}
           size='small'
-          label={labelTags.tags[tag].name}
-          onDelete={handleDelete(labelTags.tags[tag])}
+          label={labelTags.all[tag].name}
+          onDelete={handleDelete(labelTags.all[tag])}
         />
       ))}
     </div>
@@ -45,7 +45,7 @@ const SelectedTagTray = (props) => {
 SelectedTagTray.propTypes = {
   tagsState: PropTypes.objectOf(PropTypes.bool).isRequired,
   labelTags: PropTypes.shape({
-    tags: PropTypes.objectOf(PropTypes.shape({
+    all: PropTypes.objectOf(PropTypes.shape({
       name: PropTypes.string
     }))
   }).isRequired,

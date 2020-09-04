@@ -50,7 +50,7 @@ const CaptionGrid = props => {
   const { image, labelTags, showMoreThreshold = 5, ...rootProps } = props
   const classes = useStyles()
 
-  const labels = image.labels.map(t => labelTags.tags[t])
+  const labels = image.labels.map(t => labelTags.all[t])
   const labelsByCategory = groupBy(labels, 'category')
   const sources = [image, ...image.duplicated_posts]
 
@@ -152,8 +152,7 @@ CaptionGrid.propTypes = {
   image: PropTypes.object.isRequired,
   labelTags: PropTypes.shape({
     categories: PropTypes.array,
-    subcategories: PropTypes.array,
-    tags: PropTypes.object
+    all: PropTypes.object
   }).isRequired
 }
 

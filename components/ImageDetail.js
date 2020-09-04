@@ -1,4 +1,3 @@
-import { Grow } from '@material-ui/core'
 import AppBar from '@material-ui/core/AppBar'
 import Dialog from '@material-ui/core/Dialog'
 import Grid from '@material-ui/core/Grid'
@@ -59,10 +58,6 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Transition = React.forwardRef(function Transition (props, ref) {
-  return <Grow direction='up' ref={ref} {...props} />
-})
-
 const ImageDetail = props => {
   const { image, labelTags, handleClose } = props
   const classes = useStyles()
@@ -77,7 +72,6 @@ const ImageDetail = props => {
         maxWidth={false}
         fullWidth
         PaperProps={{ className: classes.paper }}
-        TransitionComponent={Transition}
         onClose={handleClose}
       >
         <div className={classes.root}>

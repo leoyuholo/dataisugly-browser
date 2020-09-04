@@ -8,8 +8,12 @@
   "javascript.validate.enable": true,
   "[javascript]": {
     "editor.formatOnSave": true,
+    "editor.defaultFormatter": "vscode.typescript-language-features",
   },
   "[javascriptreact]": {
     "editor.formatOnSave": true,
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
   }
 }

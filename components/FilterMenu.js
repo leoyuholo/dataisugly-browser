@@ -12,12 +12,13 @@ import Typography from '@material-ui/core/Typography'
 import CloseIcon from '@material-ui/icons/Close'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
-import fromPairs from 'lodash/fromPairs'
-import map from 'lodash/map'
+import keys from 'lodash/keys'
 import mapValues from 'lodash/mapValues'
+import pickBy from 'lodash/pickBy'
 import PropTypes from 'prop-types'
 import React from 'react'
 import config from '../src/config'
+import { isSubcategoryTag } from '../src/lib/tagHelper'
 import DateRangeSlider from './FilterMenuWidgets/DateRangeSlider'
 import GroupedTagTray from './FilterMenuWidgets/GroupedTagTray'
 import SelectedTagTray from './FilterMenuWidgets/SelectedTagTray'
@@ -60,7 +61,8 @@ const FilterMenu = props => {
   const [filter, setFilter] = React.useState({
     startDate: config.imageLists.dateRange[0],
     endDate: config.imageLists.dateRange[1],
-    tags: fromPairs(map(labelTags.tags, tag => [tag.tag, false]))
+    tags: {}
+    // tags: fromPairs(map(labelTags.tags, tag => [tag.tag, false]))
   })
 
   const updateFilter = (update) => {
@@ -75,8 +77,8 @@ const FilterMenu = props => {
     updateFilter({ ...newDateRangeFilter })
   }
 
-  const [openState, setOpenState] = React.useState(
-    fromPairs(labelTags.categories.map((category, i) => [category.category, i === 0])))
+  const [openState, setOpenState] = React.useState({ [labelTags.categories[0].category]: true })
+  // const [openState, setOpenState] = React.useState(fromPairs(labelTags.categories.map((category, i) => [category.category, i === 0])))
   const handleListClick = (category) => (event) => {
     const newState = !openState[category.category]
     const newOpenState = { ...mapValues(openState, state => false), [category.category]: newState }
@@ -84,6 +86,8 @@ const FilterMenu = props => {
   }
 
   const [tagsCnt, setTagsCnt] = React.useState(0)
+  const [subcatsCnt, setSubcatsCnt] = React.useState(0)
+  const [subcatsTags, setSubcatsTags] = React.useState([])
   const [tagsState, setTagsState] = React.useState(filter.tags)
   const handleTagClick = (tag) => {
     const newValue = !tagsState[tag.tag]
@@ -91,6 +95,9 @@ const FilterMenu = props => {
 
     setTagsState(newTagsState)
     setTagsCnt(tagsCnt + (newValue ? 1 : -1))
+    setSubcatsCnt(subcatsCnt + (isSubcategoryTag(tag.tag) ? (newValue ? 1 : -1) : 0))
+    setSubcatsTags(keys(pickBy(newTagsState)).filter(isSubcategoryTag))
+    // setSubcatsTags(uniq(flatMap(keys(pickBy(newTagsState)).filter(isSubcategoryTag), s => labelTags.all[s].tags)))
     updateFilter({ tags: newTagsState })
   }
 
@@ -99,6 +106,8 @@ const FilterMenu = props => {
 
     setTagsState(newTagsState)
     setTagsCnt(tagsCnt - 1)
+    setSubcatsCnt(subcatsCnt + (isSubcategoryTag(tag.tag) ? -1 : 0))
+    setSubcatsTags(keys(pickBy(newTagsState)).filter(isSubcategoryTag))
     updateFilter({ tags: newTagsState })
   }
 
@@ -149,16 +158,30 @@ const FilterMenu = props => {
               <SelectedTagTray tagsState={tagsState} labelTags={labelTags} onDelete={handleTagDelete} />
             </div>
           )}
-          {labelTags.categories.map(category => ({ category, Tag: category.subcategories.length > 0 ? GroupedTagTray : TagTray })).map(({ category, Tag }) => (
+          {subcatsCnt <= 0 ? undefined : (
+            <div>
+              <ListItem>
+                <ListItemText primary='Subcategories' />
+              </ListItem>
+              <GroupedTagTray
+                groups={subcatsTags.map(s => labelTags.all[s])}
+                tags={subcatsTags.map(s => labelTags.all[s].tags)}
+                tagsState={tagsState}
+                onClick={handleTagClick}
+                onTagMouseEnter={handlePopoverOpen}
+                onTagMouseLeave={handlePopoverClose}
+              />
+            </div>
+          )}
+          {labelTags.categories.map(category => (
             <div key={category.category}>
               <ListItem button onClick={handleListClick(category)}>
                 <ListItemText primary={category.name} />
                 {openState[category.category] ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
               <Collapse in={openState[category.category]} timeout='auto' unmountOnExit>
-                <Tag
-                  tags={category.tags}
-                  subcategories={category.subcategories}
+                <TagTray
+                  {...category}
                   tagsState={tagsState}
                   onClick={handleTagClick}
                   onTagMouseEnter={handlePopoverOpen}
@@ -204,7 +227,8 @@ FilterMenu.propTypes = {
       tags: PropTypes.array
     })),
     subcategories: PropTypes.array,
-    tags: PropTypes.objectOf(PropTypes.shape({
+    tags: PropTypes.array,
+    all: PropTypes.objectOf(PropTypes.shape({
       tag: PropTypes.string,
       category: PropTypes.string,
       subcategory: PropTypes.string,
