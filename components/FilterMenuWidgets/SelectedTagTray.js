@@ -1,5 +1,6 @@
 import Chip from '@material-ui/core/Chip'
 import { makeStyles } from '@material-ui/core/styles'
+import { some, sortBy } from 'lodash'
 import compact from 'lodash/compact'
 import map from 'lodash/map'
 import { PropTypes } from 'prop-types'
@@ -11,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     // justifyContent: 'center',
     flexWrap: 'wrap',
     '& > *': {
-      margin: theme.spacing(0.5)
+      margin: theme.spacing(0.4)
     }
   }
 }))
@@ -28,11 +29,11 @@ const SelectedTagTray = (props) => {
 
   return (
     <div className={classes.root}>
-      {selectedTags.map(tag => (
+      {sortBy(selectedTags, 'tag').map(tag => (
         <Chip
           key={tag}
           // color={tagsState[tag] ? 'primary' : undefined}
-          // variant={tagsState[tag] ? undefined : 'outlined'}
+          variant={(labelTags.all[tag].tags && some(labelTags.all[tag].tags, t => tagsState[t.tag])) ? 'outlined' : undefined}
           size='small'
           label={labelTags.all[tag].name}
           onDelete={handleDelete(labelTags.all[tag])}
