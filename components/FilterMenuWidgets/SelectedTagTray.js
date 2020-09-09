@@ -1,8 +1,9 @@
 import Chip from '@material-ui/core/Chip'
 import { makeStyles } from '@material-ui/core/styles'
-import { some, sortBy } from 'lodash'
 import compact from 'lodash/compact'
 import map from 'lodash/map'
+import some from 'lodash/some'
+import sortBy from 'lodash/sortBy'
 import { PropTypes } from 'prop-types'
 import React from 'react'
 

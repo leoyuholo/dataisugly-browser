@@ -46,7 +46,7 @@ const Index = props => {
       const json = await res.json()
 
       const newImageList = nextUrl === config.imageLists.all.url ? json.images : imageList.concat(json.images)
-      const newFilteredImageList = filterImageList(newImageList, imageListFilter, labelTags)
+      const { imageList: newFilteredImageList } = filterImageList(newImageList, imageListFilter, labelTags)
       const newNextUrl = json.next ? `${config.imageLists.root.url}/${json.next}` : null
 
       setImageList(newImageList)
@@ -68,13 +68,15 @@ const Index = props => {
     }
   }
 
+  const [filteredImages, setFilteredImages] = useState([])
   const handleImageFilter = debounce((newFilter) => {
-    const newFilteredImageList = filterImageList(imageList, newFilter, labelTags)
+    const { imageList: newFilteredImageList, images: newFilteredImages } = filterImageList(imageList, newFilter, labelTags)
 
     if (nextUrl && nextUrl !== config.imageLists.all.url && (newFilteredImageList.length / imageList.length) < 0.2) {
       setNextUrl(config.imageLists.all.url)
     }
     setImageListFilter(newFilter)
+    setFilteredImages(newFilteredImages)
     setFilteredImageList(newFilteredImageList)
   }, 1000)
 
@@ -95,7 +97,7 @@ const Index = props => {
           <title>Bad Vis Browser</title>
         </Head>
         <TitleBar isWide={isWide} toggleMenu={toggleMenu(true)} />
-        <FilterMenu isWide={isWide} open={menuState} labelTags={labelTags} onClose={toggleMenu(false)} onFilter={handleImageFilter} />
+        <FilterMenu isWide={isWide} open={menuState} labelTags={labelTags} filteredImages={filteredImages} onClose={toggleMenu(false)} onFilter={handleImageFilter} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Gallery imageList={filteredImageList} labelTags={labelTags} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} />

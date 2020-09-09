@@ -4,6 +4,7 @@ config.isServer = typeof window === 'undefined'
 config.development = !!process.env.NEXT_PUBLIC_DEV
 config.rootPath = !config.development ? '/bad-vis-browser' : ''
 config.urlPrefix = !config.isServer ? '' : config.development ? 'http://localhost:3000' : 'https://leoyuholo.github.io'
+// config.urlPrefix = !config.isServer ? '' : config.development ? 'http://localhost:3000' : 'http://ustpc:7000/projects/'
 // config.urlPrefix = !config.development ?
 //   'https://leoyuholo.github.io' :
 //   config.isServer ?

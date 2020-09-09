@@ -17,12 +17,19 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2)
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center'
   },
   signature: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end'
+  },
+  logo: {
+    width: '32px',
+    height: '32px',
+    marginLeft: '10px'
   }
 }))
 
@@ -55,6 +62,7 @@ const TitleBar = props => {
             </IconButton>}
           <Typography variant='h6' className={classes.title}>
             BAD VIS BROWSER
+            <img src='favicon.ico' alt='logo' className={classes.logo} />
           </Typography>
           {isWide &&
             <Grid className={classes.signature}>

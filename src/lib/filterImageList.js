@@ -1,6 +1,7 @@
 import intersection from 'lodash/intersection'
 import keys from 'lodash/keys'
 import pickBy from 'lodash/pickBy'
+import union from 'lodash/union'
 import { isSubcategoryTag } from './tagHelper'
 
 const keepImage = (image, filter) => {
@@ -16,6 +17,10 @@ const keepImage = (image, filter) => {
   })
 
   return result
+}
+
+export const filterImages = (filter, labelTags) => {
+  return intersection(...filter.map(tags => union(...tags.map(tag => labelTags.all[tag].images))))
 }
 
 const filterImageList = (imageList, imageListFilter, labelTags) => {
@@ -37,7 +42,10 @@ const filterImageList = (imageList, imageListFilter, labelTags) => {
 
   // console.log('filterImageList', filter, imageListFilter, expandedTags)
 
-  return imageList.filter(image => keepImage(image, filter))
+  return {
+    imageList: imageList.filter(image => keepImage(image, filter)),
+    images: filterImages(filter.tags, labelTags)
+  }
 }
 
 export default filterImageList

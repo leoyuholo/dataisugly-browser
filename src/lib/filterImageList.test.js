@@ -1,4 +1,6 @@
-import filterImageList from './filterImageList'
+import intersection from 'lodash/intersection'
+import union from 'lodash/union'
+import filterImageList, { filterImages } from './filterImageList'
 import { makeCatelog } from './tagHelper'
 import { labelTags } from './tagHelper.test'
 
@@ -22,7 +24,7 @@ const imageList = [{
   labels: ['fault:colormess', 'form:barchart']
 }]
 
-test('filterImageList single tag', () => {
+test('filterImageList should filter images by a single tag', () => {
   const imageListFilter = {
     startDate: new Date(1980, 0, 1),
     endDate: new Date(2021, 0, 1),
@@ -32,10 +34,10 @@ test('filterImageList single tag', () => {
   }
   const filteredImageList = [imageList[0], imageList[1]]
 
-  expect(filterImageList(imageList, imageListFilter, catelog)).toEqual(filteredImageList)
+  expect(filterImageList(imageList, imageListFilter, catelog).imageList).toEqual(filteredImageList)
 })
 
-test('filterImageList subcategory', () => {
+test('filterImageList should filter images by a subcategory', () => {
   const imageListFilter = {
     startDate: new Date(1980, 0, 1),
     endDate: new Date(2021, 0, 1),
@@ -45,10 +47,10 @@ test('filterImageList subcategory', () => {
   }
   const filteredImageList = [imageList[0], imageList[1], imageList[3]]
 
-  expect(filterImageList(imageList, imageListFilter, catelog)).toEqual(filteredImageList)
+  expect(filterImageList(imageList, imageListFilter, catelog).imageList).toEqual(filteredImageList)
 })
 
-test('filterImageList disabled subcategory', () => {
+test('filterImageList should ignore subcategory if its tag is in the filter', () => {
   const imageListFilter = {
     startDate: new Date(1980, 0, 1),
     endDate: new Date(2021, 0, 1),
@@ -59,5 +61,33 @@ test('filterImageList disabled subcategory', () => {
   }
   const filteredImageList = [imageList[0], imageList[1]]
 
-  expect(filterImageList(imageList, imageListFilter, catelog)).toEqual(filteredImageList)
+  expect(filterImageList(imageList, imageListFilter, catelog).imageList).toEqual(filteredImageList)
+})
+
+test('filterImages should collect a list of filtered images', () => {
+  const filter = [
+    ['fault:colorscale']
+  ]
+  const filteredImages = catelog.all[filter[0][0]].images
+
+  expect(filterImages(filter, catelog)).toEqual(filteredImages)
+})
+
+test('filterImages should union images from two tags', () => {
+  const filter = [
+    ['fault:colorscale', 'fault:colormess']
+  ]
+  const filteredImages = union(catelog.all[filter[0][0]].images, catelog.all[filter[0][1]].images)
+
+  expect(filterImages(filter, catelog)).toEqual(filteredImages)
+})
+
+test('filterImages should intersect images from two tags', () => {
+  const filter = [
+    ['fault:colorscale'],
+    ['form:barchart']
+  ]
+  const filteredImages = intersection(catelog.all[filter[0][0]].images, catelog.all[filter[1][0]].images)
+
+  expect(filterImages(filter, catelog)).toEqual(filteredImages)
 })

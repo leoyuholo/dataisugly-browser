@@ -2,6 +2,7 @@ import includes from 'lodash/includes'
 import keyBy from 'lodash/keyBy'
 import startsWith from 'lodash/startsWith'
 import sumBy from 'lodash/sumBy'
+import union from 'lodash/union'
 
 const categoryTagPrefix = 'cat'
 const subcategoryTagPrefix = 'subcat'
@@ -16,15 +17,20 @@ export const isSubcategoryTag = tag => startsWith(tag, subcategoryTagPrefix)
 export const isGroupTag = tag => startsWith(tag, groupTagPrefix)
 
 export const makeCatelog = labelTags => {
-  const tags = labelTags.tags.map(t => ({ ...t }))
+  const tags = labelTags.tags.map(t => ({ ...t, count: t.images.length }))
   const tagsBytag = keyBy(tags, 'tag')
 
-  const subcategories = labelTags.subcategories.map(s => ({
-    ...s,
-    tags: tags.filter(t => t.category === s.category && (t.subcategory === s.subcategory || includes(t.subcategories, s.subcategory))),
-    count: sumBy(tags.filter(t => t.subcategory === s.subcategory || includes(t.subcategories, s.subcategory)), 'count'),
-    tag: makeSubcategoryTag(s.category, s.subcategory)
-  }))
+  const subcategories = labelTags.subcategories.map(s => {
+    const includeTags = tags.filter(t => t.category === s.category && (t.subcategory === s.subcategory || includes(t.subcategories, s.subcategory)))
+    const images = union(...includeTags.map(t => t.images))
+    return {
+      ...s,
+      tags: includeTags,
+      images,
+      count: images.length,
+      tag: makeSubcategoryTag(s.category, s.subcategory)
+    }
+  })
   const subcategoriesByTag = keyBy(subcategories, 'tag')
 
   const groups = labelTags.groups.map(g => ({

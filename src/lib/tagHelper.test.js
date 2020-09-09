@@ -55,33 +55,33 @@ export const labelTags = {
     subcategories: ['design', 'color'],
     name: 'Ineffective Color Scheme',
     description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-    count: 32,
-    category: 'fault'
+    category: 'fault',
+    images: ['h11ynf_0', '9u4i8v_0']
   }, {
     tag: 'fault:colormess',
     subcategories: ['visual', 'color'],
     name: 'Undistinguishable Colors',
     description: 'Categorical colors are undistinguishable with each other.',
-    count: 67,
-    category: 'fault'
+    category: 'fault',
+    images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0']
   }, {
     tag: 'form:barchart',
     subcategory: 'bar',
     name: 'Bar Chart',
-    count: 250,
-    category: 'form'
+    category: 'form',
+    images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0']
   }, {
     tag: 'form:stackedbarchart',
     subcategory: 'bar',
     name: 'Stacked Bar Chart',
-    count: 30,
-    category: 'form'
+    category: 'form',
+    images: ['705oer_0']
   }, {
     tag: 'data:timeseries',
     subcategory: 'time',
     name: 'Time Series',
-    count: 212,
-    category: 'data'
+    category: 'data',
+    images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0']
   }]
 }
 
@@ -119,37 +119,42 @@ test('makeCatelog match', () => {
         subcategories: ['design', 'color'],
         name: 'Ineffective Color Scheme',
         description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-        count: 32,
-        category: 'fault'
+        category: 'fault',
+        images: ['h11ynf_0', '9u4i8v_0'],
+        count: 2
       },
       'fault:colormess': {
         tag: 'fault:colormess',
         subcategories: ['visual', 'color'],
         name: 'Undistinguishable Colors',
         description: 'Categorical colors are undistinguishable with each other.',
-        count: 67,
-        category: 'fault'
+        category: 'fault',
+        images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0'],
+        count: 5
       },
       'form:barchart': {
         tag: 'form:barchart',
         subcategory: 'bar',
         name: 'Bar Chart',
-        count: 250,
-        category: 'form'
+        category: 'form',
+        images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0'],
+        count: 7
       },
       'form:stackedbarchart': {
         tag: 'form:stackedbarchart',
         subcategory: 'bar',
         name: 'Stacked Bar Chart',
-        count: 30,
-        category: 'form'
+        category: 'form',
+        images: ['705oer_0'],
+        count: 1
       },
       'data:timeseries': {
         tag: 'data:timeseries',
         subcategory: 'time',
         name: 'Time Series',
-        count: 212,
-        category: 'data'
+        category: 'data',
+        images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0'],
+        count: 6
       },
       'group:fault:grammar': {
         category: 'fault',
@@ -167,17 +172,20 @@ test('makeCatelog match', () => {
             subcategories: ['design', 'color'],
             name: 'Ineffective Color Scheme',
             description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-            count: 32,
-            category: 'fault'
+            category: 'fault',
+            images: ['h11ynf_0', '9u4i8v_0'],
+            count: 2
           }, {
             tag: 'fault:colormess',
             subcategories: ['visual', 'color'],
             name: 'Undistinguishable Colors',
             description: 'Categorical colors are undistinguishable with each other.',
-            count: 67,
-            category: 'fault'
+            category: 'fault',
+            images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0'],
+            count: 5
           }],
-          count: 99,
+          images: ['h11ynf_0', '9u4i8v_0', 'fmfxxq_0', '705oer_0', 'ekmqhs_0'],
+          count: 5,
           tag: 'subcat:fault:color'
         }],
         tag: 'group:fault:grammar'
@@ -198,10 +206,12 @@ test('makeCatelog match', () => {
             subcategories: ['design', 'color'],
             name: 'Ineffective Color Scheme',
             description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-            count: 32,
-            category: 'fault'
+            category: 'fault',
+            images: ['h11ynf_0', '9u4i8v_0'],
+            count: 2
           }],
-          count: 32,
+          images: ['h11ynf_0', '9u4i8v_0'],
+          count: 2,
           tag: 'subcat:fault:design'
         }],
         tag: 'group:fault:pipeline'
@@ -217,17 +227,20 @@ test('makeCatelog match', () => {
           subcategories: ['design', 'color'],
           name: 'Ineffective Color Scheme',
           description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-          count: 32,
-          category: 'fault'
+          category: 'fault',
+          images: ['h11ynf_0', '9u4i8v_0'],
+          count: 2
         }, {
           tag: 'fault:colormess',
           subcategories: ['visual', 'color'],
           name: 'Undistinguishable Colors',
           description: 'Categorical colors are undistinguishable with each other.',
-          count: 67,
-          category: 'fault'
+          category: 'fault',
+          images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0'],
+          count: 5
         }],
-        count: 99,
+        images: ['h11ynf_0', '9u4i8v_0', 'fmfxxq_0', '705oer_0', 'ekmqhs_0'],
+        count: 5,
         tag: 'subcat:fault:color'
       },
       'subcat:fault:design': {
@@ -241,10 +254,12 @@ test('makeCatelog match', () => {
           subcategories: ['design', 'color'],
           name: 'Ineffective Color Scheme',
           description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-          count: 32,
-          category: 'fault'
+          category: 'fault',
+          images: ['h11ynf_0', '9u4i8v_0'],
+          count: 2
         }],
-        count: 32,
+        images: ['h11ynf_0', '9u4i8v_0'],
+        count: 2,
         tag: 'subcat:fault:design'
       },
       'subcat:form:bar': {
@@ -255,16 +270,19 @@ test('makeCatelog match', () => {
           tag: 'form:barchart',
           subcategory: 'bar',
           name: 'Bar Chart',
-          count: 250,
-          category: 'form'
+          category: 'form',
+          images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0'],
+          count: 7
         }, {
           tag: 'form:stackedbarchart',
           subcategory: 'bar',
           name: 'Stacked Bar Chart',
-          count: 30,
-          category: 'form'
+          category: 'form',
+          images: ['705oer_0'],
+          count: 1
         }],
-        count: 280,
+        images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0', '705oer_0'],
+        count: 8,
         tag: 'subcat:form:bar'
       },
       'subcat:data:time': {
@@ -276,10 +294,12 @@ test('makeCatelog match', () => {
           tag: 'data:timeseries',
           subcategory: 'time',
           name: 'Time Series',
-          count: 212,
-          category: 'data'
+          category: 'data',
+          images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0'],
+          count: 6
         }],
-        count: 212,
+        images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0'],
+        count: 6,
         tag: 'subcat:data:time'
       },
       'cat:fault': {
@@ -291,17 +311,19 @@ test('makeCatelog match', () => {
           subcategories: ['design', 'color'],
           name: 'Ineffective Color Scheme',
           description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-          count: 32,
-          category: 'fault'
+          category: 'fault',
+          images: ['h11ynf_0', '9u4i8v_0'],
+          count: 2
         }, {
           tag: 'fault:colormess',
           subcategories: ['visual', 'color'],
           name: 'Undistinguishable Colors',
           description: 'Categorical colors are undistinguishable with each other.',
-          count: 67,
-          category: 'fault'
+          category: 'fault',
+          images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0'],
+          count: 5
         }],
-        count: 99,
+        count: 7,
         groups: [{
           category: 'fault',
           group: 'grammar',
@@ -318,17 +340,20 @@ test('makeCatelog match', () => {
               subcategories: ['design', 'color'],
               name: 'Ineffective Color Scheme',
               description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-              count: 32,
-              category: 'fault'
+              category: 'fault',
+              images: ['h11ynf_0', '9u4i8v_0'],
+              count: 2
             }, {
               tag: 'fault:colormess',
               subcategories: ['visual', 'color'],
               name: 'Undistinguishable Colors',
               description: 'Categorical colors are undistinguishable with each other.',
-              count: 67,
-              category: 'fault'
+              category: 'fault',
+              images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0'],
+              count: 5
             }],
-            count: 99,
+            images: ['h11ynf_0', '9u4i8v_0', 'fmfxxq_0', '705oer_0', 'ekmqhs_0'],
+            count: 5,
             tag: 'subcat:fault:color'
           }],
           tag: 'group:fault:grammar'
@@ -348,10 +373,12 @@ test('makeCatelog match', () => {
               subcategories: ['design', 'color'],
               name: 'Ineffective Color Scheme',
               description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-              count: 32,
-              category: 'fault'
+              category: 'fault',
+              images: ['h11ynf_0', '9u4i8v_0'],
+              count: 2
             }],
-            count: 32,
+            images: ['h11ynf_0', '9u4i8v_0'],
+            count: 2,
             tag: 'subcat:fault:design'
           }],
           tag: 'group:fault:pipeline'
@@ -367,17 +394,20 @@ test('makeCatelog match', () => {
             subcategories: ['design', 'color'],
             name: 'Ineffective Color Scheme',
             description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-            count: 32,
-            category: 'fault'
+            category: 'fault',
+            images: ['h11ynf_0', '9u4i8v_0'],
+            count: 2
           }, {
             tag: 'fault:colormess',
             subcategories: ['visual', 'color'],
             name: 'Undistinguishable Colors',
             description: 'Categorical colors are undistinguishable with each other.',
-            count: 67,
-            category: 'fault'
+            category: 'fault',
+            images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0'],
+            count: 5
           }],
-          count: 99,
+          images: ['h11ynf_0', '9u4i8v_0', 'fmfxxq_0', '705oer_0', 'ekmqhs_0'],
+          count: 5,
           tag: 'subcat:fault:color'
         }, {
           category: 'fault',
@@ -390,10 +420,12 @@ test('makeCatelog match', () => {
             subcategories: ['design', 'color'],
             name: 'Ineffective Color Scheme',
             description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-            count: 32,
-            category: 'fault'
+            category: 'fault',
+            images: ['h11ynf_0', '9u4i8v_0'],
+            count: 2
           }],
-          count: 32,
+          images: ['h11ynf_0', '9u4i8v_0'],
+          count: 2,
           tag: 'subcat:fault:design'
         }],
         tag: 'cat:fault'
@@ -406,16 +438,18 @@ test('makeCatelog match', () => {
           tag: 'form:barchart',
           subcategory: 'bar',
           name: 'Bar Chart',
-          count: 250,
-          category: 'form'
+          category: 'form',
+          images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0'],
+          count: 7
         }, {
           tag: 'form:stackedbarchart',
           subcategory: 'bar',
           name: 'Stacked Bar Chart',
-          count: 30,
-          category: 'form'
+          category: 'form',
+          images: ['705oer_0'],
+          count: 1
         }],
-        count: 280,
+        count: 8,
         groups: [],
         subcategories: [{
           category: 'form',
@@ -425,16 +459,19 @@ test('makeCatelog match', () => {
             tag: 'form:barchart',
             subcategory: 'bar',
             name: 'Bar Chart',
-            count: 250,
-            category: 'form'
+            category: 'form',
+            images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0'],
+            count: 7
           }, {
             tag: 'form:stackedbarchart',
             subcategory: 'bar',
             name: 'Stacked Bar Chart',
-            count: 30,
-            category: 'form'
+            category: 'form',
+            images: ['705oer_0'],
+            count: 1
           }],
-          count: 280,
+          images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0', '705oer_0'],
+          count: 8,
           tag: 'subcat:form:bar'
         }],
         tag: 'cat:form'
@@ -446,10 +483,11 @@ test('makeCatelog match', () => {
           tag: 'data:timeseries',
           subcategory: 'time',
           name: 'Time Series',
-          count: 212,
-          category: 'data'
+          category: 'data',
+          images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0'],
+          count: 6
         }],
-        count: 212,
+        count: 6,
         groups: [],
         subcategories: [{
           category: 'data',
@@ -460,10 +498,12 @@ test('makeCatelog match', () => {
             tag: 'data:timeseries',
             subcategory: 'time',
             name: 'Time Series',
-            count: 212,
-            category: 'data'
+            category: 'data',
+            images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0'],
+            count: 6
           }],
-          count: 212,
+          images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0'],
+          count: 6,
           tag: 'subcat:data:time'
         }],
         tag: 'cat:data'
@@ -478,17 +518,19 @@ test('makeCatelog match', () => {
         subcategories: ['design', 'color'],
         name: 'Ineffective Color Scheme',
         description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-        count: 32,
-        category: 'fault'
+        category: 'fault',
+        images: ['h11ynf_0', '9u4i8v_0'],
+        count: 2
       }, {
         tag: 'fault:colormess',
         subcategories: ['visual', 'color'],
         name: 'Undistinguishable Colors',
         description: 'Categorical colors are undistinguishable with each other.',
-        count: 67,
-        category: 'fault'
+        category: 'fault',
+        images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0'],
+        count: 5
       }],
-      count: 99,
+      count: 7,
       groups: [{
         category: 'fault',
         group: 'grammar',
@@ -505,17 +547,20 @@ test('makeCatelog match', () => {
             subcategories: ['design', 'color'],
             name: 'Ineffective Color Scheme',
             description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-            count: 32,
-            category: 'fault'
+            category: 'fault',
+            images: ['h11ynf_0', '9u4i8v_0'],
+            count: 2
           }, {
             tag: 'fault:colormess',
             subcategories: ['visual', 'color'],
             name: 'Undistinguishable Colors',
             description: 'Categorical colors are undistinguishable with each other.',
-            count: 67,
-            category: 'fault'
+            category: 'fault',
+            images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0'],
+            count: 5
           }],
-          count: 99,
+          images: ['h11ynf_0', '9u4i8v_0', 'fmfxxq_0', '705oer_0', 'ekmqhs_0'],
+          count: 5,
           tag: 'subcat:fault:color'
         }],
         tag: 'group:fault:grammar'
@@ -535,10 +580,12 @@ test('makeCatelog match', () => {
             subcategories: ['design', 'color'],
             name: 'Ineffective Color Scheme',
             description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-            count: 32,
-            category: 'fault'
+            category: 'fault',
+            images: ['h11ynf_0', '9u4i8v_0'],
+            count: 2
           }],
-          count: 32,
+          images: ['h11ynf_0', '9u4i8v_0'],
+          count: 2,
           tag: 'subcat:fault:design'
         }],
         tag: 'group:fault:pipeline'
@@ -554,17 +601,20 @@ test('makeCatelog match', () => {
           subcategories: ['design', 'color'],
           name: 'Ineffective Color Scheme',
           description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-          count: 32,
-          category: 'fault'
+          category: 'fault',
+          images: ['h11ynf_0', '9u4i8v_0'],
+          count: 2
         }, {
           tag: 'fault:colormess',
           subcategories: ['visual', 'color'],
           name: 'Undistinguishable Colors',
           description: 'Categorical colors are undistinguishable with each other.',
-          count: 67,
-          category: 'fault'
+          category: 'fault',
+          images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0'],
+          count: 5
         }],
-        count: 99,
+        images: ['h11ynf_0', '9u4i8v_0', 'fmfxxq_0', '705oer_0', 'ekmqhs_0'],
+        count: 5,
         tag: 'subcat:fault:color'
       }, {
         category: 'fault',
@@ -577,10 +627,12 @@ test('makeCatelog match', () => {
           subcategories: ['design', 'color'],
           name: 'Ineffective Color Scheme',
           description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-          count: 32,
-          category: 'fault'
+          category: 'fault',
+          images: ['h11ynf_0', '9u4i8v_0'],
+          count: 2
         }],
-        count: 32,
+        images: ['h11ynf_0', '9u4i8v_0'],
+        count: 2,
         tag: 'subcat:fault:design'
       }],
       tag: 'cat:fault'
@@ -592,16 +644,18 @@ test('makeCatelog match', () => {
         tag: 'form:barchart',
         subcategory: 'bar',
         name: 'Bar Chart',
-        count: 250,
-        category: 'form'
+        category: 'form',
+        images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0'],
+        count: 7
       }, {
         tag: 'form:stackedbarchart',
         subcategory: 'bar',
         name: 'Stacked Bar Chart',
-        count: 30,
-        category: 'form'
+        category: 'form',
+        images: ['705oer_0'],
+        count: 1
       }],
-      count: 280,
+      count: 8,
       groups: [],
       subcategories: [{
         category: 'form',
@@ -611,16 +665,19 @@ test('makeCatelog match', () => {
           tag: 'form:barchart',
           subcategory: 'bar',
           name: 'Bar Chart',
-          count: 250,
-          category: 'form'
+          category: 'form',
+          images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0'],
+          count: 7
         }, {
           tag: 'form:stackedbarchart',
           subcategory: 'bar',
           name: 'Stacked Bar Chart',
-          count: 30,
-          category: 'form'
+          category: 'form',
+          images: ['705oer_0'],
+          count: 1
         }],
-        count: 280,
+        images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0', '705oer_0'],
+        count: 8,
         tag: 'subcat:form:bar'
       }],
       tag: 'cat:form'
@@ -631,10 +688,11 @@ test('makeCatelog match', () => {
         tag: 'data:timeseries',
         subcategory: 'time',
         name: 'Time Series',
-        count: 212,
-        category: 'data'
+        category: 'data',
+        images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0'],
+        count: 6
       }],
-      count: 212,
+      count: 6,
       groups: [],
       subcategories: [{
         category: 'data',
@@ -645,10 +703,12 @@ test('makeCatelog match', () => {
           tag: 'data:timeseries',
           subcategory: 'time',
           name: 'Time Series',
-          count: 212,
-          category: 'data'
+          category: 'data',
+          images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0'],
+          count: 6
         }],
-        count: 212,
+        images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0'],
+        count: 6,
         tag: 'subcat:data:time'
       }],
       tag: 'cat:data'
@@ -669,17 +729,20 @@ test('makeCatelog match', () => {
           subcategories: ['design', 'color'],
           name: 'Ineffective Color Scheme',
           description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-          count: 32,
-          category: 'fault'
+          category: 'fault',
+          images: ['h11ynf_0', '9u4i8v_0'],
+          count: 2
         }, {
           tag: 'fault:colormess',
           subcategories: ['visual', 'color'],
           name: 'Undistinguishable Colors',
           description: 'Categorical colors are undistinguishable with each other.',
-          count: 67,
-          category: 'fault'
+          category: 'fault',
+          images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0'],
+          count: 5
         }],
-        count: 99,
+        images: ['h11ynf_0', '9u4i8v_0', 'fmfxxq_0', '705oer_0', 'ekmqhs_0'],
+        count: 5,
         tag: 'subcat:fault:color'
       }],
       tag: 'group:fault:grammar'
@@ -699,10 +762,12 @@ test('makeCatelog match', () => {
           subcategories: ['design', 'color'],
           name: 'Ineffective Color Scheme',
           description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-          count: 32,
-          category: 'fault'
+          category: 'fault',
+          images: ['h11ynf_0', '9u4i8v_0'],
+          count: 2
         }],
-        count: 32,
+        images: ['h11ynf_0', '9u4i8v_0'],
+        count: 2,
         tag: 'subcat:fault:design'
       }],
       tag: 'group:fault:pipeline'
@@ -718,17 +783,20 @@ test('makeCatelog match', () => {
         subcategories: ['design', 'color'],
         name: 'Ineffective Color Scheme',
         description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-        count: 32,
-        category: 'fault'
+        category: 'fault',
+        images: ['h11ynf_0', '9u4i8v_0'],
+        count: 2
       }, {
         tag: 'fault:colormess',
         subcategories: ['visual', 'color'],
         name: 'Undistinguishable Colors',
         description: 'Categorical colors are undistinguishable with each other.',
-        count: 67,
-        category: 'fault'
+        category: 'fault',
+        images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0'],
+        count: 5
       }],
-      count: 99,
+      images: ['h11ynf_0', '9u4i8v_0', 'fmfxxq_0', '705oer_0', 'ekmqhs_0'],
+      count: 5,
       tag: 'subcat:fault:color'
     }, {
       category: 'fault',
@@ -741,10 +809,12 @@ test('makeCatelog match', () => {
         subcategories: ['design', 'color'],
         name: 'Ineffective Color Scheme',
         description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-        count: 32,
-        category: 'fault'
+        category: 'fault',
+        images: ['h11ynf_0', '9u4i8v_0'],
+        count: 2
       }],
-      count: 32,
+      images: ['h11ynf_0', '9u4i8v_0'],
+      count: 2,
       tag: 'subcat:fault:design'
     }, {
       category: 'form',
@@ -754,16 +824,19 @@ test('makeCatelog match', () => {
         tag: 'form:barchart',
         subcategory: 'bar',
         name: 'Bar Chart',
-        count: 250,
-        category: 'form'
+        category: 'form',
+        images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0'],
+        count: 7
       }, {
         tag: 'form:stackedbarchart',
         subcategory: 'bar',
         name: 'Stacked Bar Chart',
-        count: 30,
-        category: 'form'
+        category: 'form',
+        images: ['705oer_0'],
+        count: 1
       }],
-      count: 280,
+      images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0', '705oer_0'],
+      count: 8,
       tag: 'subcat:form:bar'
     }, {
       category: 'data',
@@ -774,10 +847,12 @@ test('makeCatelog match', () => {
         tag: 'data:timeseries',
         subcategory: 'time',
         name: 'Time Series',
-        count: 212,
-        category: 'data'
+        category: 'data',
+        images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0'],
+        count: 6
       }],
-      count: 212,
+      images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0'],
+      count: 6,
       tag: 'subcat:data:time'
     }],
     tags: [{
@@ -785,33 +860,38 @@ test('makeCatelog match', () => {
       subcategories: ['design', 'color'],
       name: 'Ineffective Color Scheme',
       description: 'Ineffective color scheme, e.g., categorical colors for continuous variable.',
-      count: 32,
-      category: 'fault'
+      category: 'fault',
+      images: ['h11ynf_0', '9u4i8v_0'],
+      count: 2
     }, {
       tag: 'fault:colormess',
       subcategories: ['visual', 'color'],
       name: 'Undistinguishable Colors',
       description: 'Categorical colors are undistinguishable with each other.',
-      count: 67,
-      category: 'fault'
+      category: 'fault',
+      images: ['fmfxxq_0', '705oer_0', 'h11ynf_0', 'ekmqhs_0', '9u4i8v_0'],
+      count: 5
     }, {
       tag: 'form:barchart',
       subcategory: 'bar',
       name: 'Bar Chart',
-      count: 250,
-      category: 'form'
+      category: 'form',
+      images: ['ccvzbi_0', 'b7fsls_0', '2zjfyt_0', 'gcpu1n_0', 'ekmqhs_0', '21uju6_0', '7v6ul8_0'],
+      count: 7
     }, {
       tag: 'form:stackedbarchart',
       subcategory: 'bar',
       name: 'Stacked Bar Chart',
-      count: 30,
-      category: 'form'
+      category: 'form',
+      images: ['705oer_0'],
+      count: 1
     }, {
       tag: 'data:timeseries',
       subcategory: 'time',
       name: 'Time Series',
-      count: 212,
-      category: 'data'
+      category: 'data',
+      images: ['ccvzbi_0', 'fmfxxq_0', 'b7fsls_0', 'gcpu1n_0', 'ekmqhs_0', '7v6ul8_0'],
+      count: 6
     }]
   }
 

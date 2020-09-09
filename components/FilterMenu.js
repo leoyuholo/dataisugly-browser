@@ -13,13 +13,11 @@ import CloseIcon from '@material-ui/icons/Close'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import keys from 'lodash/keys'
-import mapValues from 'lodash/mapValues'
 import pickBy from 'lodash/pickBy'
 import PropTypes from 'prop-types'
 import React from 'react'
 import config from '../src/config'
 import { isSubcategoryTag } from '../src/lib/tagHelper'
-import DateRangeSlider from './FilterMenuWidgets/DateRangeSlider'
 import GroupedTagTray from './FilterMenuWidgets/GroupedTagTray'
 import SelectedTagTray from './FilterMenuWidgets/SelectedTagTray'
 import TagTray from './FilterMenuWidgets/TagTray'
@@ -55,7 +53,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const FilterMenu = props => {
-  const { isWide, open, labelTags, onClose, onFilter, drawerProps } = props
+  const { isWide, open, labelTags, filteredImages, onClose, onFilter, drawerProps } = props
   const classes = useStyles()
 
   const [filter, setFilter] = React.useState({
@@ -81,7 +79,8 @@ const FilterMenu = props => {
   // const [openState, setOpenState] = React.useState(fromPairs(labelTags.categories.map((category, i) => [category.category, i === 0])))
   const handleListClick = (category) => (event) => {
     const newState = !openState[category.category]
-    const newOpenState = { ...mapValues(openState, state => false), [category.category]: newState }
+    const newOpenState = { ...openState, [category.category]: newState }
+    // const newOpenState = { ...mapValues(openState, state => false), [category.category]: newState }
     setOpenState(newOpenState)
   }
 
@@ -139,7 +138,7 @@ const FilterMenu = props => {
       <div className={classes.drawerContainer}>
         <List>
           <ListItem>
-            <ListItemText variant='h6'>Filter</ListItemText>
+            {/* <ListItemText variant='h6'>Filter</ListItemText> */}
             {!isWide &&
               <ListItemSecondaryAction>
                 <IconButton edge='end' aria-label='close' onClick={onClose}>
@@ -147,9 +146,9 @@ const FilterMenu = props => {
                 </IconButton>
               </ListItemSecondaryAction>}
           </ListItem>
-          <ListItem>
+          {/* <ListItem>
             <DateRangeSlider width={drawerWidth} dates={[filter.startDate, filter.endDate]} dateRange={config.imageLists.dateRange} onChange={handleDateRangeChange} />
-          </ListItem>
+          </ListItem> */}
           {tagsCnt <= 0 ? undefined : (
             <div>
               <ListItem>
@@ -167,6 +166,7 @@ const FilterMenu = props => {
                 groups={subcatsTags.map(s => labelTags.all[s])}
                 tags={subcatsTags.map(s => labelTags.all[s].tags)}
                 tagsState={tagsState}
+                filteredImages={filteredImages}
                 onClick={handleTagClick}
                 onTagMouseEnter={handlePopoverOpen}
                 onTagMouseLeave={handlePopoverClose}
@@ -183,6 +183,7 @@ const FilterMenu = props => {
                 <TagTray
                   {...category}
                   tagsState={tagsState}
+                  filteredImages={filteredImages}
                   onClick={handleTagClick}
                   onTagMouseEnter={handlePopoverOpen}
                   onTagMouseLeave={handlePopoverClose}
@@ -237,6 +238,7 @@ FilterMenu.propTypes = {
       count: PropTypes.number
     }))
   }),
+  filteredImages: PropTypes.arrayOf(PropTypes.string),
   onClose: PropTypes.func,
   onFilter: PropTypes.func,
   drawerProps: PropTypes.object
