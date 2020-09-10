@@ -1,6 +1,6 @@
 # For information on the contents of the container image below, see following Dockerfile:
 # https://github.com/microsoft/vscode-dev-containers/tree/v0.43.0/containers/javascript-node-12/.devcontainer/Dockerfile
-FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0.43-12
+FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:14
 
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
