@@ -36,9 +36,10 @@ const SimpleTagTray = (props) => {
   return (
     <div className={classes.root}>
       {(sorted ? tags : sortBy(tags, 'count').reverse()).map(tag => (
-        // {(sorted ? tags : sortBy(tags.filter(t => filteredImageCounts[t.tag]), 'count').reverse()).map(tag => (
+        // {(sorted ? tags : sortBy(tags.filter(t => filteredImageCounts[t.tag] !== 0), 'count').reverse()).map(tag => (
         <Chip
           key={tag.tag}
+          disabled={filteredImageCounts[tag.tag] === 0}
           variant={tagsState[tag.tag] ? undefined : 'outlined'}
           size='small'
           label={`${tag.name} (${filteredImageCounts[tag.tag]})`}

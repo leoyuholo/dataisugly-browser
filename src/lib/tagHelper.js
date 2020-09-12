@@ -17,7 +17,7 @@ export const isSubcategoryTag = tag => startsWith(tag, subcategoryTagPrefix)
 export const isGroupTag = tag => startsWith(tag, groupTagPrefix)
 
 export const makeCatelog = labelTags => {
-  const tags = labelTags.tags.map(t => ({ ...t, count: t.images.length }))
+  const tags = labelTags.tags.map(t => ({ ...t, count: t.images.length })).filter(t => t.count)
   const tagsBytag = keyBy(tags, 'tag')
 
   const subcategories = labelTags.subcategories.map(s => {
