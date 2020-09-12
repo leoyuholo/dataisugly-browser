@@ -1,30 +1,25 @@
+import includes from 'lodash/includes'
 import intersection from 'lodash/intersection'
+import keyBy from 'lodash/keyBy'
 import keys from 'lodash/keys'
+import mapValues from 'lodash/mapValues'
 import pickBy from 'lodash/pickBy'
 import union from 'lodash/union'
 import { isSubcategoryTag } from './tagHelper'
-
-const keepImage = (image, filter) => {
-  let result = true
-
-  if (filter.startDate && (image.datetime - filter.startDate) < 0) result = false
-  if (filter.endDate && (image.datetime - filter.endDate) > 0) result = false
-
-  filter.tags.forEach(tags => {
-    if (tags.length > 0 && intersection(image.labels, tags).length === 0) {
-      result = false
-    }
-  })
-
-  return result
-}
 
 export const filterImages = (filter, labelTags) => {
   return intersection(...filter.map(tags => union(...tags.map(tag => labelTags.all[tag].images))))
 }
 
-const filterImageList = (imageList, imageListFilter, labelTags) => {
-  const tags = keys(pickBy(imageListFilter.tags))
+export const countFilteredImages = (imageList, labelTags) => ({
+  ...mapValues(keyBy(labelTags.tags, 'tag'), tag => intersection(tag.images, imageList).length),
+  ...mapValues(keyBy(labelTags.subcategories, 'tag'), tag => intersection(tag.images, imageList).length),
+  ...mapValues(keyBy(labelTags.groups, 'tag'), tag => intersection(tag.images, imageList).length),
+  ...mapValues(keyBy(labelTags.categories, 'tag'), tag => intersection(tag.images, imageList).length)
+})
+
+export const expandFilterTags = (imageListFilter, labelTags) => {
+  const tags = keys(pickBy(imageListFilter))
   const expandedTags = tags.map(t =>
     !isSubcategoryTag(t)
       ? [t]
@@ -33,18 +28,26 @@ const filterImageList = (imageList, imageListFilter, labelTags) => {
         : []
   )
 
-  const filter = {
-    startDate: +imageListFilter.startDate / 1000,
-    endDate: +imageListFilter.endDate / 1000,
-    tags: expandedTags.filter(a => a.length)
-    // tags: values(groupBy(expandedTags, t => labelTags.all[t].category))
+  return expandedTags.filter(a => a.length)
+}
+
+const filterImageList = (imageList, imageListFilter, labelTags) => {
+  const filter = expandFilterTags(imageListFilter, labelTags)
+
+  if (filter.length === 0) {
+    return {
+      imageList,
+      imageCounts: mapValues(labelTags.all, t => t.count)
+    }
   }
+
+  const filteredImageList = filterImages(filter, labelTags)
 
   // console.log('filterImageList', filter, imageListFilter, expandedTags)
 
   return {
-    imageList: imageList.filter(image => keepImage(image, filter)),
-    images: filterImages(filter.tags, labelTags)
+    imageList: imageList.filter(i => includes(filteredImageList, i.image_name)),
+    imageCounts: countFilteredImages(filteredImageList, labelTags)
   }
 }
 

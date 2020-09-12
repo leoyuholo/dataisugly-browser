@@ -10,7 +10,7 @@ import Loading from './Loading'
 
 const Image = props => {
   const { imageId, labelTags } = props
-  const image = props.image || useSWR(`${config.imageMeta.baseUrl}/${imageId}.json`, fetcher).data
+  const image = useSWR(`${config.imageMeta.baseUrl}/${imageId}.json`, fetcher).data
   const router = useRouter()
 
   const handleClose = () => {
@@ -29,7 +29,6 @@ const Image = props => {
 
 Image.propTypes = {
   imageId: PropTypes.string.isRequired,
-  image: PropTypes.object,
   labelTags: PropTypes.object.isRequired
 }
 

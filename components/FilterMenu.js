@@ -16,7 +16,6 @@ import keys from 'lodash/keys'
 import pickBy from 'lodash/pickBy'
 import PropTypes from 'prop-types'
 import React from 'react'
-import config from '../src/config'
 import { isSubcategoryTag } from '../src/lib/tagHelper'
 import GroupedTagTray from './FilterMenuWidgets/GroupedTagTray'
 import SelectedTagTray from './FilterMenuWidgets/SelectedTagTray'
@@ -53,15 +52,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const FilterMenu = props => {
-  const { isWide, open, labelTags, filteredImages, onClose, onFilter, drawerProps } = props
+  const { isWide, open, labelTags, filteredImageCounts, onClose, onFilter, drawerProps } = props
   const classes = useStyles()
 
-  const [filter, setFilter] = React.useState({
-    startDate: config.imageLists.dateRange[0],
-    endDate: config.imageLists.dateRange[1],
-    tags: {}
-    // tags: fromPairs(map(labelTags.tags, tag => [tag.tag, false]))
-  })
+  const [filter, setFilter] = React.useState({})
 
   const updateFilter = (update) => {
     const newFilter = { ...filter, ...update }
@@ -69,25 +63,17 @@ const FilterMenu = props => {
     onFilter(newFilter)
   }
 
-  const handleDateRangeChange = (newDateRange) => {
-    const newDateRangeFilter = { startDate: newDateRange[0], endDate: newDateRange[1] }
-    // console.log('filterMenu handleDateRangeChange', newDateRange.map(d => d.toISOString()))
-    updateFilter({ ...newDateRangeFilter })
-  }
-
   const [openState, setOpenState] = React.useState({ [labelTags.categories[0].category]: true })
-  // const [openState, setOpenState] = React.useState(fromPairs(labelTags.categories.map((category, i) => [category.category, i === 0])))
   const handleListClick = (category) => (event) => {
     const newState = !openState[category.category]
     const newOpenState = { ...openState, [category.category]: newState }
-    // const newOpenState = { ...mapValues(openState, state => false), [category.category]: newState }
     setOpenState(newOpenState)
   }
 
   const [tagsCnt, setTagsCnt] = React.useState(0)
   const [subcatsCnt, setSubcatsCnt] = React.useState(0)
   const [subcatsTags, setSubcatsTags] = React.useState([])
-  const [tagsState, setTagsState] = React.useState(filter.tags)
+  const [tagsState, setTagsState] = React.useState(filter)
   const handleTagClick = (tag) => {
     const newValue = !tagsState[tag.tag]
     const newTagsState = { ...tagsState, [tag.tag]: newValue }
@@ -96,8 +82,7 @@ const FilterMenu = props => {
     setTagsCnt(tagsCnt + (newValue ? 1 : -1))
     setSubcatsCnt(subcatsCnt + (isSubcategoryTag(tag.tag) ? (newValue ? 1 : -1) : 0))
     setSubcatsTags(keys(pickBy(newTagsState)).filter(isSubcategoryTag))
-    // setSubcatsTags(uniq(flatMap(keys(pickBy(newTagsState)).filter(isSubcategoryTag), s => labelTags.all[s].tags)))
-    updateFilter({ tags: newTagsState })
+    updateFilter(newTagsState)
   }
 
   const handleTagDelete = (tag) => {
@@ -107,7 +92,7 @@ const FilterMenu = props => {
     setTagsCnt(tagsCnt - 1)
     setSubcatsCnt(subcatsCnt + (isSubcategoryTag(tag.tag) ? -1 : 0))
     setSubcatsTags(keys(pickBy(newTagsState)).filter(isSubcategoryTag))
-    updateFilter({ tags: newTagsState })
+    updateFilter(newTagsState)
   }
 
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -138,7 +123,6 @@ const FilterMenu = props => {
       <div className={classes.drawerContainer}>
         <List>
           <ListItem>
-            {/* <ListItemText variant='h6'>Filter</ListItemText> */}
             {!isWide &&
               <ListItemSecondaryAction>
                 <IconButton edge='end' aria-label='close' onClick={onClose}>
@@ -146,9 +130,6 @@ const FilterMenu = props => {
                 </IconButton>
               </ListItemSecondaryAction>}
           </ListItem>
-          {/* <ListItem>
-            <DateRangeSlider width={drawerWidth} dates={[filter.startDate, filter.endDate]} dateRange={config.imageLists.dateRange} onChange={handleDateRangeChange} />
-          </ListItem> */}
           {tagsCnt <= 0 ? undefined : (
             <div>
               <ListItem>
@@ -166,7 +147,7 @@ const FilterMenu = props => {
                 groups={subcatsTags.map(s => labelTags.all[s])}
                 tags={subcatsTags.map(s => labelTags.all[s].tags)}
                 tagsState={tagsState}
-                filteredImages={filteredImages}
+                filteredImageCounts={filteredImageCounts}
                 onClick={handleTagClick}
                 onTagMouseEnter={handlePopoverOpen}
                 onTagMouseLeave={handlePopoverClose}
@@ -183,7 +164,7 @@ const FilterMenu = props => {
                 <TagTray
                   {...category}
                   tagsState={tagsState}
-                  filteredImages={filteredImages}
+                  filteredImageCounts={filteredImageCounts}
                   onClick={handleTagClick}
                   onTagMouseEnter={handlePopoverOpen}
                   onTagMouseLeave={handlePopoverClose}
@@ -238,7 +219,7 @@ FilterMenu.propTypes = {
       count: PropTypes.number
     }))
   }),
-  filteredImages: PropTypes.arrayOf(PropTypes.string),
+  filteredImageCounts: PropTypes.objectOf(PropTypes.number),
   onClose: PropTypes.func,
   onFilter: PropTypes.func,
   drawerProps: PropTypes.object

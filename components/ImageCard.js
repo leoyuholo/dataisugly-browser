@@ -24,6 +24,7 @@ const ImageCard = props => {
           width={config.thumbnails.size.width}
           height={config.thumbnails.size.height}
           image={`${config.images.thumbnails.url}/${image.thumbnail_path}`}
+          loading='lazy'
         />
       </CardActionArea>
     </Card>

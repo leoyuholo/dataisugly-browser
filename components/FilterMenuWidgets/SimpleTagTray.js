@@ -1,7 +1,6 @@
 import Chip from '@material-ui/core/Chip'
 import { makeStyles } from '@material-ui/core/styles'
 import InfoIcon from '@material-ui/icons/Info'
-import intersection from 'lodash/intersection'
 import noop from 'lodash/noop'
 import sortBy from 'lodash/sortBy'
 import { PropTypes } from 'prop-types'
@@ -19,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SimpleTagTray = (props) => {
-  const { tags, sorted, tagsState, filteredImages, onClick, onTagMouseEnter, onTagMouseLeave } = props
+  const { tags, sorted, tagsState, filteredImageCounts, onClick, onTagMouseEnter, onTagMouseLeave } = props
   const classes = useStyles()
 
   const handleClick = (tag) => (event) => {
@@ -37,11 +36,12 @@ const SimpleTagTray = (props) => {
   return (
     <div className={classes.root}>
       {(sorted ? tags : sortBy(tags, 'count').reverse()).map(tag => (
+        // {(sorted ? tags : sortBy(tags.filter(t => filteredImageCounts[t.tag]), 'count').reverse()).map(tag => (
         <Chip
           key={tag.tag}
           variant={tagsState[tag.tag] ? undefined : 'outlined'}
           size='small'
-          label={`${tag.name} (${!filteredImages?.length ? tag.count : intersection(tag.images, filteredImages).length})`}
+          label={`${tag.name} (${filteredImageCounts[tag.tag]})`}
           onDelete={!tag.description ? undefined : noop} // use deleteIcon as infoIcon
           deleteIcon={!tag.description
             ? undefined
@@ -67,6 +67,7 @@ SimpleTagTray.propTypes = {
   })),
   sorted: PropTypes.bool,
   tagsState: PropTypes.object,
+  filteredImageCounts: PropTypes.objectOf(PropTypes.number),
   onClick: PropTypes.func,
   onTagMouseEnter: PropTypes.func,
   onTagMouseLeave: PropTypes.func

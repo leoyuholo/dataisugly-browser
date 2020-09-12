@@ -34,16 +34,12 @@ config.imageLists = {}
 config.imageLists.root = {
   url: `${config.urlPrefix}/image_lists`
 }
-config.imageLists.page = [{
-  url: `${config.imageLists.root.url}/0.json`
-}]
+config.imageLists.dir = {
+  url: `${config.imageLists.root.url}/dir.json`
+}
 config.imageLists.all = {
   url: `${config.imageLists.root.url}/all.json`
 }
-config.imageLists.dateRange = [
-  new Date('2012-11-01T00:00:00Z'),
-  new Date()
-]
 
 config.imageMeta = {
   baseUrl: `${config.urlPrefix}/meta`

@@ -1,7 +1,7 @@
+import flatMap from 'lodash/flatMap'
 import includes from 'lodash/includes'
 import keyBy from 'lodash/keyBy'
 import startsWith from 'lodash/startsWith'
-import sumBy from 'lodash/sumBy'
 import union from 'lodash/union'
 
 const categoryTagPrefix = 'cat'
@@ -25,29 +25,42 @@ export const makeCatelog = labelTags => {
     const images = union(...includeTags.map(t => t.images))
     return {
       ...s,
-      tags: includeTags,
       images,
+      tags: includeTags,
       count: images.length,
       tag: makeSubcategoryTag(s.category, s.subcategory)
     }
   })
   const subcategoriesByTag = keyBy(subcategories, 'tag')
 
-  const groups = labelTags.groups.map(g => ({
-    ...g,
-    subcategories: subcategories.filter(s => s.category === g.category && s.group === g.group),
-    tag: makeGroupTag(g.category, g.group)
-  }))
+  const groups = labelTags.groups.map(g => {
+    const includeSubcategories = subcategories.filter(s => s.category === g.category && s.group === g.group)
+    const includeTags = flatMap(includeSubcategories, 'tags')
+    const images = union(...includeTags.map(t => t.images))
+    return {
+      ...g,
+      images,
+      tags: includeTags,
+      subcategories: includeSubcategories,
+      count: images.length,
+      tag: makeGroupTag(g.category, g.group)
+    }
+  })
   const groupsByTag = keyBy(groups, 'tag')
 
-  const categories = labelTags.categories.map(c => ({
-    ...c,
-    tags: tags.filter(t => t.category === c.category),
-    count: sumBy(tags.filter(t => includes(t.category, c.category)), 'count'),
-    groups: groups.filter(g => g.category === c.category),
-    subcategories: subcategories.filter(s => s.category === c.category),
-    tag: makeCategoryTag(c.category)
-  }))
+  const categories = labelTags.categories.map(c => {
+    const includeTags = tags.filter(t => t.category === c.category)
+    const images = union(...includeTags.map(t => t.images))
+    return {
+      ...c,
+      images,
+      tags: includeTags,
+      subcategories: subcategories.filter(s => s.category === c.category),
+      groups: groups.filter(g => g.category === c.category),
+      count: images.length,
+      tag: makeCategoryTag(c.category)
+    }
+  })
   const categoriesByTag = keyBy(categories, 'tag')
 
   return {
@@ -63,41 +76,3 @@ export const makeCatelog = labelTags => {
     tags
   }
 }
-
-// export const makeCatelog = labelTags => {
-//   const tags = labelTags.tags.map(t => ({ ...t }))
-//   const subcategories = labelTags.subcategories.map(s => ({
-//     ...s,
-//     tags: [],
-//     tag: makeSubcategoryTag(s.category, s.subcategory)
-//   }))
-//   const categories = labelTags.categories.map(c => ({
-//     ...c,
-//     tags: [],
-//     subcategories: [],
-//     tag: makeCategoryTag(c.category)
-//   }))
-
-//   const all = {
-//     ...keyBy(tags, 'tag'),
-//     ...keyBy(subcategories, 'tag'),
-//     ...keyBy(categories, 'tag')
-//   }
-
-//   subcategories.forEach(s => all[makeCategoryTag(s.category)].subcategories.push(s))
-
-//   tags.forEach(t => {
-//     all[makeCategoryTag(t.category)].tags.push(t)
-//     const subcats = t.subcategories || (t.subcategory ? [t.subcategory] : [])
-//     subcats.forEach(s => {
-//       all[makeSubcategoryTag(t.category, s)].tags.push(t)
-//     })
-//   })
-
-//   return {
-//     all,
-//     categories,
-//     subcategories,
-//     tags
-//   }
-// }

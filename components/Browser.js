@@ -1,12 +1,11 @@
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth'
-import fetch from 'isomorphic-unfetch'
 import debounce from 'lodash/debounce'
+import mapValues from 'lodash/mapValues'
 import Head from 'next/head'
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
-import config from '../src/config'
+import React, { useState } from 'react'
 import filterImageList from '../src/lib/filterImageList'
 import { theme } from '../src/theme'
 import FilterMenu from './FilterMenu'
@@ -28,55 +27,16 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Index = props => {
-  const { imageList: { images, next }, labelTags } = props
+  const { imageList: { images }, labelTags } = props
   const classes = useStyles()
   const isWide = isWidthUp('sm', props.width)
 
-  const [imageList, setImageList] = useState(images)
-  const [imageListFilter, setImageListFilter] = useState({})
   const [filteredImageList, setFilteredImageList] = useState(images)
-  const [nextUrl, setNextUrl] = useState(`${config.imageLists.root.url}/${next}`)
-  const [toFetch, setToFetch] = useState(0)
-  const [isFetching, setIsFetching] = useState(false)
-  useEffect(() => {
-    async function fetchImages () {
-      setIsFetching(true)
-
-      const res = await fetch(nextUrl)
-      const json = await res.json()
-
-      const newImageList = nextUrl === config.imageLists.all.url ? json.images : imageList.concat(json.images)
-      const { imageList: newFilteredImageList } = filterImageList(newImageList, imageListFilter, labelTags)
-      const newNextUrl = json.next ? `${config.imageLists.root.url}/${json.next}` : null
-
-      setImageList(newImageList)
-      setFilteredImageList(newFilteredImageList)
-      setNextUrl(newNextUrl)
-
-      setToFetch(false)
-      setIsFetching(false)
-    }
-
-    if (toFetch && !isFetching && nextUrl) {
-      fetchImages()
-    }
-  }, [toFetch, isFetching, nextUrl, imageList])
-
-  const handleFetchMore = (imageLength) => {
-    if (filteredImageList.length === imageLength) {
-      setToFetch(true)
-    }
-  }
-
-  const [filteredImages, setFilteredImages] = useState([])
+  const [filteredImageCounts, setFilteredImageCounts] = useState(mapValues(labelTags.all, t => t.count))
   const handleImageFilter = debounce((newFilter) => {
-    const { imageList: newFilteredImageList, images: newFilteredImages } = filterImageList(imageList, newFilter, labelTags)
+    const { imageList: newFilteredImageList, imageCounts: newFilteredImageCounts } = filterImageList(images, newFilter, labelTags)
 
-    if (nextUrl && nextUrl !== config.imageLists.all.url && (newFilteredImageList.length / imageList.length) < 0.2) {
-      setNextUrl(config.imageLists.all.url)
-    }
-    setImageListFilter(newFilter)
-    setFilteredImages(newFilteredImages)
+    setFilteredImageCounts(newFilteredImageCounts)
     setFilteredImageList(newFilteredImageList)
   }, 1000)
 
@@ -89,7 +49,7 @@ const Index = props => {
     setMenuState(state)
   }
 
-  return !imageList ? (<Loading />) : (
+  return !images ? (<Loading />) : (
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
         <CssBaseline />
@@ -97,10 +57,10 @@ const Index = props => {
           <title>Bad Vis Browser</title>
         </Head>
         <TitleBar isWide={isWide} toggleMenu={toggleMenu(true)} />
-        <FilterMenu isWide={isWide} open={menuState} labelTags={labelTags} filteredImages={filteredImages} onClose={toggleMenu(false)} onFilter={handleImageFilter} />
+        <FilterMenu isWide={isWide} open={menuState} labelTags={labelTags} filteredImageCounts={filteredImageCounts} onClose={toggleMenu(false)} onFilter={handleImageFilter} />
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Gallery imageList={filteredImageList} labelTags={labelTags} hasMoreImages={!!nextUrl} isFetching={isFetching} handleFetchMore={handleFetchMore} />
+          <Gallery imageList={filteredImageList} labelTags={labelTags} />
         </main>
       </div>
     </ThemeProvider>
@@ -109,8 +69,11 @@ const Index = props => {
 
 Index.propTypes = {
   imageList: PropTypes.shape({
-    images: PropTypes.array,
-    next: PropTypes.string
+    images: PropTypes.arrayOf(PropTypes.shape({
+      image_name: PropTypes.string,
+      thumbnail_path: PropTypes.string,
+      labels: PropTypes.arrayOf(PropTypes.string)
+    }))
   }).isRequired,
   labelTags: PropTypes.object.isRequired
 }
